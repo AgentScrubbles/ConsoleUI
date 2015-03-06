@@ -1,6 +1,9 @@
 package main_console;
 
+import java.awt.Font;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -8,12 +11,18 @@ import javax.swing.SwingUtilities;
 
 public class MainWindow extends JFrame {
 
+	Font labelFont;
+	JLabel firstLabel;
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3880026026104218593L;
 
 	public MainWindow() {
+
+		labelFont = new Font("FUTURA", Font.PLAIN, 20);
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -24,6 +33,12 @@ public class MainWindow extends JFrame {
 
 	private void initComponents() {
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		firstLabel = new JLabel();
+		firstLabel.setFont(labelFont);
+		firstLabel.setText("Pending...");
+		MainWindow.this.add(firstLabel);
+		MainWindow.this.pack();
 		this.setVisible(true);
 	}
 	
@@ -35,11 +50,11 @@ public class MainWindow extends JFrame {
 	 */
 	public void UpdateValues(final IValues values){
 		SwingUtilities.invokeLater(new Runnable(){
-
 			@Override
 			public void run() {
-				//Update the UI here with values.
-				//TODO
+				firstLabel.setText(values.getRank());
+				firstLabel.repaint();
+				MainWindow.this.repaint();
 			}
 		});
 	}
