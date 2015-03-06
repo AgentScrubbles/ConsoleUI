@@ -4,7 +4,6 @@ import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
@@ -35,7 +34,7 @@ public class MainWindow extends JFrame {
 		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		firstLabel = new JLabel();
-		firstLabel.setFont(labelFont);
+		//firstLabel.setFont(labelFont);
 		firstLabel.setText("Pending...");
 		MainWindow.this.add(firstLabel);
 		MainWindow.this.pack();
