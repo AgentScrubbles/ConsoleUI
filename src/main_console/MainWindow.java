@@ -3,6 +3,7 @@ package main_console;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -80,35 +81,41 @@ public class MainWindow extends JFrame {
 			public void run() {
 				boxes.clear();
 				mainPanel = new JPanel();
+				GridLayout mainPanelLayout = new GridLayout(numBoxesWidth, numBoxesHeight);
+				mainPanelLayout.setHgap(padding);
+				mainPanelLayout.setVgap(padding);
+				mainPanel.setLayout(mainPanelLayout);
 				for (IValues vals : values) {
-					Point newLoc = generateNextLocation();
-					Box box = new Box(newLoc.x, newLoc.y, boxWidth(), boxHeight(),
-							labelFont, labelFont, vals);
+					Box box = new Box(labelFont, labelFont, vals);
 					box.paintComponent();
 					boxes.add(box);
 					mainPanel.add(box);
+					
 				}
 				mainPanel.repaint();
+				mainPanel.setVisible(true);
 				MainWindow.this.add(mainPanel, BorderLayout.CENTER);
 				MainWindow.this.repaint();
 			}
 		});
 	}
 
-	private Point generateNextLocation(){
-		Point acceptable = new Point(x,y);
+	@SuppressWarnings("unused")
+	private Point generateNextLocation() {
+		Point acceptable = new Point(x, y);
 		x += boxWidth() + padding;
-		if(x >= screen.width){
+		if (x >= screen.width) {
 			x = padding;
 			y = y + padding + boxHeight();
-		} 
+		}
 		return acceptable;
 	}
 
 	private int boxWidth() {
 		return (screen.width - (numBoxesWidth * padding)) / numBoxesWidth;
 	}
-	private int boxHeight(){
+
+	private int boxHeight() {
 		return (screen.height - (numBoxesHeight * padding)) / numBoxesHeight;
 	}
 

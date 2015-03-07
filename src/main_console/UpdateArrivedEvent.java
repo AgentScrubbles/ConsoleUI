@@ -1,8 +1,6 @@
 package main_console;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Custom ArrivedEvent that will store a pointer to the IValues that are received by the
