@@ -2,6 +2,9 @@ package main_console;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class ServerActionHandler implements ActionListener{
 
@@ -14,7 +17,7 @@ public class ServerActionHandler implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		UpdateArrivedEvent event = (UpdateArrivedEvent) e;
-		IValues values = event.getValues();
+		Collection<IValues> values = event.getValues();
 		_window.UpdateValues(values);
 	}
 	

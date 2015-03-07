@@ -11,11 +11,11 @@ import java.util.Scanner;
 public class SocketListener implements Runnable {
 
 	private int port;
-	private ActionListener listener;
+	private final SafeParser listener;
 
-	public SocketListener(int port, ActionListener actOn) {
+	public SocketListener(int port, SafeParser callback) {
 		this.port = port;
-		this.listener = actOn;
+		this.listener = callback;
 		new Thread(this).start();
 	}
 
@@ -36,7 +36,6 @@ public class SocketListener implements Runnable {
 		try {
 			// We expect line-oriented text input, so wrap the input stream
 			// in a Scanner
-			Scanner scanner = new Scanner(s.getInputStream());
 			
 			//while (scanner.hasNextLine()) {
 				
@@ -45,27 +44,14 @@ public class SocketListener implements Runnable {
 				stream.read(b);
 				String file = new String(b);
 				
-				final String line = file;
 				
 				System.out.println("Received from client:");
-				System.out.println(line);
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						IValues receivedValues = new ValuesReceived(line);
-						ActionEvent event = new UpdateArrivedEvent(this,
-								java.awt.event.ActionEvent.ACTION_PERFORMED,
-								"COMPLETE", receivedValues);
-						listener.actionPerformed(event);
-					}
-
-				}).start();
+				System.out.println(file);
+				listener.setString(file);
+				new Thread(listener).start();
 
 			
 			
-			scanner.close();
-
 		} finally {
 			// close the connection in a finally block
 			s.close();
@@ -111,24 +97,5 @@ public class SocketListener implements Runnable {
 		}
 	}
 
-	/**
-	 * May be implemented as a parsing object later for JSON
-	 * 
-	 * @author Robert
-	 *
-	 */
-	class ValuesReceived implements IValues {
 
-		private String result;
-
-		public ValuesReceived(String result) {
-			this.result = result;
-		}
-
-		@Override
-		public String getRank() {
-			return result;
-		}
-
-	}
 }

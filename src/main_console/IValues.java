@@ -1,5 +1,8 @@
 package main_console;
 
 public interface IValues {
-	public String getRank();
+	public String name();
+	public String current();
+	public String month();
+	public String goal();
 }
