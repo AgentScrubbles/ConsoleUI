@@ -37,6 +37,7 @@ public class ServerRunner {
 		while(keyboard.next().charAt(0) != 'q'){
 			System.out.println(ServerRunner.class + "Unknown command");
 		}
+		keyboard.close();
 		
 		uiComponent.stop();
 		parserComponent.stop();
