@@ -3,10 +3,8 @@ package main_console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.awt.event.ActionListener;
 import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
@@ -17,7 +15,8 @@ public class ParserComponent extends Component {
 	private AtomicBoolean _stop;
 	private ConcurrentLinkedQueue<JSONMessage> _inboundQueue;
 
-	public ParserComponent(Component callback) {
+	public ParserComponent(Component logger, Component console, Component callback) {
+		super(logger, console);
 		_sendComponent = callback;
 		_stop = new AtomicBoolean(false);
 		_inboundQueue = new ConcurrentLinkedQueue<JSONMessage>();
@@ -66,7 +65,7 @@ public class ParserComponent extends Component {
 	}
 
 	@Override
-	public void handle(JSONMessage msg) {
+	public synchronized void handle(JSONMessage msg) {
 		_inboundQueue.add(msg);
 		notifyAll();
 	}
@@ -77,7 +76,7 @@ public class ParserComponent extends Component {
 	 */
 	private synchronized void runMessageProcesser() {
 		while (!_stop.get()) {
-			while (queueIsEmpty()) {
+			while (_inboundQueue.isEmpty()) {
 				try {
 					wait();
 				} catch (InterruptedException ignore) {
@@ -90,10 +89,12 @@ public class ParserComponent extends Component {
 						jsonMsg.getCorrelationId(), completed);
 				_sendComponent.send(uiMsg);
 			} catch (Exception ex) {
+				print(ex.getMessage());
 				log(ex.getMessage());
 			}
 		}
-		log("ParserComponent has stopped.");
+		log("Stopped.");
+		print("Stopped.");
 	}
 
 	@Override
