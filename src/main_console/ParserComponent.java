@@ -75,6 +75,7 @@ public class ParserComponent extends Component {
 	 * ones.
 	 */
 	private synchronized void runMessageProcesser() {
+		print("Started");
 		while (!_stop.get()) {
 			while (_inboundQueue.isEmpty()) {
 				try {

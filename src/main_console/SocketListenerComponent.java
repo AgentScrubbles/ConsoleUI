@@ -10,11 +10,13 @@ public class SocketListenerComponent extends Component {
 
 	private int _port;
 	Component _sendComponent;
+	Component _saveComponent;
 	private AtomicBoolean _stop;
 
-	public SocketListenerComponent(Component logger, Component console, Component jsonComponent, int port) {
+	public SocketListenerComponent(Component logger, Component console, Component jsonComponent, Component saveComponent, int port) {
 		super(logger, console);
 		_sendComponent = jsonComponent;
+		_saveComponent = saveComponent;
 		_stop = new AtomicBoolean(false);
 		_port = port;
 	}
@@ -43,6 +45,7 @@ public class SocketListenerComponent extends Component {
 			IMessage jsonMessage = new JSONMessage(this,
 					CorrelationGenerator.generate(), file);
 			_sendComponent.send(jsonMessage);
+			_saveComponent.send(jsonMessage); //Save the last message received
 
 		} finally {
 			// close the connection in a finally block
@@ -89,7 +92,7 @@ public class SocketListenerComponent extends Component {
 				}
 			}
 		}
-		print("Server stopped.");
+		print("Stopped");
 	}
 
 	@Override
