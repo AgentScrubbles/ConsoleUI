@@ -8,21 +8,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class SocketListener implements Runnable {
+public class SocketListenerComponent extends Component {
 
 	private int port;
-	private final SafeParser listener;
+	Component sendComponent;
 
-	public SocketListener(int port, SafeParser callback) {
-		this.port = port;
-		this.listener = callback;
-		new Thread(this).start();
+	public SocketListenerComponent(int port, Component jsonComponent) {
+		sendComponent = jsonComponent;
 	}
 
-	@Override
-	public void run() {
-		startConnection();
-	}
+	
 
 	/**
 	 * Helper method for handling a client connection. Closes the socket (and
@@ -47,8 +42,8 @@ public class SocketListener implements Runnable {
 				
 				System.out.println("Received from client:");
 				System.out.println(file);
-				listener.setString(file);
-				new Thread(listener).start();
+				IMessage jsonMessage = new JSONMessage(this, CorrelationGenerator.generate(), file);
+				sendComponent.send(jsonMessage);
 
 			
 			
@@ -95,6 +90,18 @@ public class SocketListener implements Runnable {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void send(IMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
