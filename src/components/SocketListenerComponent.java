@@ -45,7 +45,7 @@ public class SocketListenerComponent extends Component {
 			stream.read(b);
 			String file = new String(b);
 
-			print("Received from client:\n" + file);
+			print("Received from new data from client.");
 			IMessage jsonMessage = new JSONMessage(this,
 					CorrelationGenerator.generate(), file);
 			_sendComponent.send(jsonMessage);

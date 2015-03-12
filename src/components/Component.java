@@ -1,5 +1,7 @@
 package components;
 
+import java.util.Date;
+
 import messages.ErrorMessage;
 import messages.IMessage;
 import messages.JSONMessage;
@@ -24,17 +26,21 @@ public abstract class Component {
 
 
 	protected void log(String logString) {
-		logString = this.getClass() + ": " + logString;
+		logString = generateClassString() + logString;
 		logger.send(new TextMessage(this, CorrelationGenerator.generate(),
 				logString));
 	}
 
 	protected void print(String printString) {
-		printString = this.getClass() + ": " + printString;
+		printString = generateClassString() + printString;
 		console.send(new TextMessage(this, CorrelationGenerator.generate(),
 				printString));
 	}
 
+	private String generateClassString(){
+		Date d = new Date();
+		return "[ " + d.toString() + " ] [ " + this.getClass().getSimpleName() + " ] ";
+	}
 	
 
 	/**

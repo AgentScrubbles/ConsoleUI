@@ -68,6 +68,7 @@ public class PersistantComponent extends Component {
 			// Check JSONMessages first, they are higher priority
 			if (!inboundJSONMessages.isEmpty()) {
 				saveLastJSON();
+				print(_filepath + " has been updated.");
 			}
 			if (!inboundLoadMessages.isEmpty()) {
 				LoadMessage msg = inboundLoadMessages.poll();
@@ -80,6 +81,7 @@ public class PersistantComponent extends Component {
 					IMessage retMessage = new JSONMessage(this, msg.getCorrelationId(),
 							loaded);
 					_sendLoadedMessageComponent.send(retMessage);
+					print(_filepath + " has been loaded.");
 				}
 			}
 		}
@@ -124,11 +126,11 @@ public class PersistantComponent extends Component {
 			return complete;
 
 		} catch (FileNotFoundException e) {
-			print("FileNotFound: " + e.getStackTrace());
-			log("FileNotFound: " + e.getStackTrace());
+			print("FileNotFound: " + e.getMessage());
+			log("FileNotFound: " + e.getMessage());
 		} catch (IOException e) {
-			print("IOException: " + e.getStackTrace());
-			log("IOException: " + e.getStackTrace());
+			print("IOException: " + e.getMessage());
+			log("IOException: " + e.getMessage());
 		}
 		return null;
 	}

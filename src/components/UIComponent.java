@@ -79,6 +79,7 @@ public class UIComponent extends Component{
 			}
 			UIMessage uiMsg = inboundMessages.poll();
 			window.UpdateValues(uiMsg.getValues());
+			print("Values updated");
 		}
 		print("Stopped");
 	}

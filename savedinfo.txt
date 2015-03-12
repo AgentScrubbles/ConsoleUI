@@ -1,0 +1,1 @@
+{"PrecinctRevGoal":{"current":"1","month":"1","goal":"1"},"MonthlyBudget":{"current":"10","month":"2","goal":"2"},"NPS":{"current":"3","month":"5","goal":"2"}}
