@@ -58,7 +58,7 @@ public class ConsoleOutputComponent extends Component{
 	
 	@Override
 	public synchronized void handle(IMessage msg){
-		inboundMessages.add(new TextMessage(this, CorrelationGenerator.generate(), "Unhandled message."));
+		inboundMessages.add(new TextMessage(this, IntGenerator.generateCorrelation(), "Unhandled message."));
 		notifyAll();
 	}
 	

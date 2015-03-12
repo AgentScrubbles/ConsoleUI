@@ -47,7 +47,7 @@ public class SocketListenerComponent extends Component {
 
 			print("Received from new data from client.");
 			IMessage jsonMessage = new JSONMessage(this,
-					CorrelationGenerator.generate(), file);
+					IntGenerator.generateCorrelation(), file);
 			_sendComponent.send(jsonMessage);
 			_saveComponent.send(jsonMessage); //Save the last message received
 

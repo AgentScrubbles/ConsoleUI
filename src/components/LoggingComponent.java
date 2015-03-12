@@ -51,7 +51,7 @@ public class LoggingComponent extends Component{
 	
 	@Override
 	public synchronized void handle(IMessage msg){
-		inboundMessages.add(new TextMessage(this, CorrelationGenerator.generate(), "Unhandled Message."));
+		inboundMessages.add(new TextMessage(this, IntGenerator.generateCorrelation(), "Unhandled Message."));
 		notifyAll();
 	}
 	

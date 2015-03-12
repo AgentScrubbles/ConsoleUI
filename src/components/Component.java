@@ -27,13 +27,13 @@ public abstract class Component {
 
 	protected void log(String logString) {
 		logString = generateClassString() + logString;
-		logger.send(new TextMessage(this, CorrelationGenerator.generate(),
+		logger.send(new TextMessage(this, IntGenerator.generateCorrelation(),
 				logString));
 	}
 
 	protected void print(String printString) {
 		printString = generateClassString() + printString;
-		console.send(new TextMessage(this, CorrelationGenerator.generate(),
+		console.send(new TextMessage(this, IntGenerator.generateCorrelation(),
 				printString));
 	}
 
