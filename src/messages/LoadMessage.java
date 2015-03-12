@@ -1,15 +1,19 @@
 package messages;
 
 import components.Component;
+import components.IntGenerator;
 
 public class LoadMessage implements IMessage {
 
-	private Component _sender;
-	private int _correlationID;
+	private final Component _sender;
+	private final int _correlationID;
+	private final int _id;
 	
-	public LoadMessage(Component sender, int id){
+	public LoadMessage(Component sender, int correlationID){
 		_sender = sender;
-		_correlationID = id;
+		_correlationID = correlationID;
+		_id = IntGenerator.generateUniqueID();
+		
 	}
 	
 	@Override
@@ -19,7 +23,7 @@ public class LoadMessage implements IMessage {
 
 	@Override
 	public int getId() {
-		return _correlationID;
+		return _id;
 	}
 
 	@Override

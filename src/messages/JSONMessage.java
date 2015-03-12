@@ -1,17 +1,20 @@
 package messages;
 
 import components.Component;
+import components.IntGenerator;
 
 public class JSONMessage implements IMessage {
 
-	private Component _sender;
-	private int _id;
-	private String _json;
+	private final Component _sender;
+	private final int _id;
+	private final int _correlation;
+	private final String _json;
 	
-	public JSONMessage(Component sender, int id, String json){
+	public JSONMessage(Component sender, int correlationID, String json){
 		_sender = sender;
-		_id = id;
+		_id = IntGenerator.generateUniqueID();
 		_json = json;
+		_correlation = correlationID;
 	}
 	
 	@Override
@@ -26,7 +29,7 @@ public class JSONMessage implements IMessage {
 
 	@Override
 	public int getCorrelationId() {
-		return _id;
+		return _correlation;
 	}
 
 	@Override

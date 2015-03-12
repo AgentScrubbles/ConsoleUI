@@ -50,7 +50,7 @@ public class UIComponent extends Component{
 	 * Must have LoadComponent set
 	 */
 	public void loadSavedValues(){
-		IMessage msg = new LoadMessage(this, CorrelationGenerator.generate());
+		IMessage msg = new LoadMessage(this, IntGenerator.generateCorrelation());
 		if(_loadComponent != null){
 			_loadComponent.send(msg);
 		}

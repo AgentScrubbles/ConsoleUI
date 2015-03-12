@@ -3,19 +3,21 @@ package messages;
 import java.util.List;
 
 import components.Component;
-
+import components.IntGenerator;
 import main_console.IValues;
 
 public class UIMessage implements IMessage {
 
-	private Component _sender;
-	private int _id;
-	private List<IValues> _values;
+	private final Component _sender;
+	private final int _id;
+	private final int _correlationID;
+	private final List<IValues> _values;
 	
-	public UIMessage(Component sender, int id, List<IValues> values){
+	public UIMessage(Component sender, int correlationID, List<IValues> values){
 		_sender = sender;
-		_id = id;
+		_correlationID = correlationID;
 		_values = values;
+		_id = IntGenerator.generateUniqueID();
 	}
 	
 	@Override
@@ -30,7 +32,7 @@ public class UIMessage implements IMessage {
 
 	@Override
 	public int getCorrelationId() {
-		return _id;
+		return _correlationID;
 	}
 
 	@Override

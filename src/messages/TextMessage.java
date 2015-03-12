@@ -1,17 +1,20 @@
 package messages;
 
 import components.Component;
+import components.IntGenerator;
 
 public class TextMessage implements IMessage {
 
-	private String _message;
-	private Component _sender;
-	private int _id;
+	private final String _message;
+	private final Component _sender;
+	private final int _id;
+	private final int _correlationID;
 	
-	public TextMessage(Component sender, int id, String msg){
+	public TextMessage(Component sender, int correlationID, String msg){
 		_message = msg;
-		_id = id;
+		_correlationID = correlationID;
 		_sender = sender;
+		_id = IntGenerator.generateUniqueID();
 	}
 	
 	@Override
@@ -26,7 +29,7 @@ public class TextMessage implements IMessage {
 
 	@Override
 	public int getCorrelationId() {
-		return _id;
+		return _correlationID;
 	}
 
 	@Override

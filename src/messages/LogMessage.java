@@ -1,31 +1,44 @@
 package messages;
 
 import components.Component;
+import components.IntGenerator;
 
 public class LogMessage implements IMessage {
 
+	private final Component _sender;
+	private final int _correlationID;
+	private final int _id;
+	private final String _logString;
+	
+	public LogMessage(Component sender, int correlationID, String logString){
+		_sender = sender;
+		_correlationID = correlationID;
+		_logString = logString;
+		_id = IntGenerator.generateUniqueID();
+	}
+	
 	@Override
 	public Component getSender() {
-		// TODO Auto-generated method stub
-		return null;
+		return _sender;
 	}
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _id;
 	}
 
 	@Override
 	public int getCorrelationId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _correlationID;
 	}
 
 	@Override
 	public void dispatch(Component receiver) {
-		// TODO Auto-generated method stub
-
+		receiver.handle(this);
+	}
+	
+	public String getLogString(){
+		return _logString;
 	}
 
 }

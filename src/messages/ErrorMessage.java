@@ -1,17 +1,20 @@
 package messages;
 
 import components.Component;
+import components.IntGenerator;
 
 public class ErrorMessage implements IMessage{
 
-	private Component _sender;
-	private int _correlationID;
-	private String _errorText;
+	private final Component _sender;
+	private final int _correlationID;
+	private final int _id;
+	private final String _errorText;
 	
 	public ErrorMessage(Component sender, int correlationID, String errorText){
 		_sender = sender;
 		_correlationID = correlationID;
 		_errorText = errorText;
+		_id = IntGenerator.generateUniqueID();
 	}
 	
 	@Override
@@ -21,7 +24,7 @@ public class ErrorMessage implements IMessage{
 
 	@Override
 	public int getId() {
-		return _correlationID;
+		return _id;
 	}
 
 	@Override
