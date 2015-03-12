@@ -1,15 +1,17 @@
-package main_console;
+package messages;
 
-public class TextMessage implements IMessage {
+import components.Component;
 
-	private String _message;
+public class JSONMessage implements IMessage {
+
 	private Component _sender;
 	private int _id;
+	private String _json;
 	
-	public TextMessage(Component sender, int id, String msg){
-		_message = msg;
-		_id = id;
+	public JSONMessage(Component sender, int id, String json){
 		_sender = sender;
+		_id = id;
+		_json = json;
 	}
 	
 	@Override
@@ -32,8 +34,8 @@ public class TextMessage implements IMessage {
 		receiver.handle(this);
 	}
 	
-	public String getMessage(){
-		return _message;
+	public String getJSON(){
+		return _json;
 	}
 
 }

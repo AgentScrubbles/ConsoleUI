@@ -1,10 +1,13 @@
-package main_console;
+package components;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import messages.IMessage;
+import messages.JSONMessage;
 
 public class SocketListenerComponent extends Component {
 

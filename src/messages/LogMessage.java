@@ -1,4 +1,6 @@
-package main_console;
+package messages;
+
+import components.Component;
 
 public class LogMessage implements IMessage {
 

@@ -1,4 +1,4 @@
-package main_console;
+package components;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

@@ -1,15 +1,15 @@
-package main_console;
+package messages;
 
-public class JSONMessage implements IMessage {
+import components.Component;
+
+public class LoadMessage implements IMessage {
 
 	private Component _sender;
-	private int _id;
-	private String _json;
+	private int _correlationID;
 	
-	public JSONMessage(Component sender, int id, String json){
+	public LoadMessage(Component sender, int id){
 		_sender = sender;
-		_id = id;
-		_json = json;
+		_correlationID = id;
 	}
 	
 	@Override
@@ -19,21 +19,17 @@ public class JSONMessage implements IMessage {
 
 	@Override
 	public int getId() {
-		return _id;
+		return _correlationID;
 	}
 
 	@Override
 	public int getCorrelationId() {
-		return _id;
+		return _correlationID;
 	}
 
 	@Override
 	public void dispatch(Component receiver) {
 		receiver.handle(this);
-	}
-	
-	public String getJSON(){
-		return _json;
 	}
 
 }

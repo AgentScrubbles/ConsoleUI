@@ -1,4 +1,4 @@
-package main_console;
+package components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.lang.reflect.Type;
+
+import main_console.ConcreteValues;
+import main_console.IValues;
+import messages.IMessage;
+import messages.JSONMessage;
+import messages.UIMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

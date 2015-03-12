@@ -1,6 +1,10 @@
-package main_console;
+package messages;
 
 import java.util.List;
+
+import components.Component;
+
+import main_console.IValues;
 
 public class UIMessage implements IMessage {
 

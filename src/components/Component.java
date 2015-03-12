@@ -1,4 +1,11 @@
-package main_console;
+package components;
+
+import messages.ErrorMessage;
+import messages.IMessage;
+import messages.JSONMessage;
+import messages.LoadMessage;
+import messages.TextMessage;
+import messages.UIMessage;
 
 /**
  * Base component type for an actor-style message-passing programming model.

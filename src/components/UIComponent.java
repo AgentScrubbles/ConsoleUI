@@ -1,8 +1,12 @@
-package main_console;
+package components;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import messages.ErrorMessage;
+import messages.IMessage;
+import messages.LoadMessage;
+import messages.UIMessage;
 import console_ui.MainWindow;
 
 public class UIComponent extends Component{

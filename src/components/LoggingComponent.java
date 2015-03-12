@@ -1,22 +1,26 @@
-package main_console;
+package components;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ConsoleOutputComponent extends Component{
+import messages.IMessage;
+import messages.TextMessage;
+
+public class LoggingComponent extends Component{
 
 	private ConcurrentLinkedQueue<TextMessage> inboundMessages;
 	private AtomicBoolean _stop;
 	
-	public ConsoleOutputComponent() {
+	public LoggingComponent() {
 		super(null, null);
-		_stop = new AtomicBoolean(false);
 		inboundMessages = new ConcurrentLinkedQueue<TextMessage>();
+		_stop = new AtomicBoolean(false);
 	}
 
 	@Override
 	public void send(IMessage message) {
 		message.dispatch(this);
+		
 	}
 
 	private synchronized void processMessages(){
@@ -24,12 +28,28 @@ public class ConsoleOutputComponent extends Component{
 			while(inboundMessages.isEmpty()){
 				try {
 					wait();
-				} catch (InterruptedException ignore) { //Nothing we can do, we are in the console.
+				} catch (InterruptedException ignore) { //Nothing we can do, we are the logger
 				}
 			}
 			TextMessage msg = inboundMessages.poll();
-			System.out.println(msg.getMessage());
+			logMessage(msg.getMessage());
 		}
+	}
+	
+	private void logMessage(String msg){
+		//TODO
+	}
+	
+	@Override
+	public synchronized void handle(TextMessage msg){
+		inboundMessages.add(msg);
+		notifyAll();
+	}
+	
+	@Override
+	public synchronized void handle(IMessage msg){
+		inboundMessages.add(new TextMessage(this, CorrelationGenerator.generate(), "Unhandled Message."));
+		notifyAll();
 	}
 	
 	@Override
@@ -49,16 +69,4 @@ public class ConsoleOutputComponent extends Component{
 		_stop.set(true);
 	}
 	
-	@Override
-	public synchronized void handle(IMessage msg){
-		inboundMessages.add(new TextMessage(this, CorrelationGenerator.generate(), "Unhandled message."));
-		notifyAll();
-	}
-	
-	@Override
-	public synchronized void handle(TextMessage msg){
-		inboundMessages.add(msg);
-		notifyAll();
-	}
-
 }
