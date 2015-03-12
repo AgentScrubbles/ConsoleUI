@@ -28,6 +28,9 @@ public class LoggingComponent extends Component{
 			while(inboundMessages.isEmpty()){
 				try {
 					wait();
+					if(_stop.get()){
+						return;
+					}
 				} catch (InterruptedException ignore) { //Nothing we can do, we are the logger
 				}
 			}
@@ -65,8 +68,9 @@ public class LoggingComponent extends Component{
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		_stop.set(true);
+		notifyAll();
 	}
 	
 }

@@ -49,6 +49,7 @@ public class MainWindow extends JFrame {
 		this.padding = padding;
 		this.x = padding;
 		this.y = padding;
+		show();
 		
 	}
 	

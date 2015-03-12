@@ -12,8 +12,9 @@ import messages.JSONMessage;
 public class SocketListenerComponent extends Component {
 
 	private int _port;
-	Component _sendComponent;
-	Component _saveComponent;
+	private Component _sendComponent;
+	private Component _saveComponent;
+	private Thread _serverListenerThread;
 	private AtomicBoolean _stop;
 
 	public SocketListenerComponent(Component logger, Component console, Component jsonComponent, Component saveComponent, int port) {
@@ -105,19 +106,22 @@ public class SocketListenerComponent extends Component {
 
 	@Override
 	public void start() {
-		new Thread(new Runnable() {
+		_serverListenerThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				startConnection();
 			}
 
-		}).start();
+		});
+		_serverListenerThread.start();
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		_stop.set(true);
+		notifyAll();
+		_serverListenerThread.interrupt();
 	}
 
 }

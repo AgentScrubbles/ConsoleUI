@@ -38,7 +38,6 @@ public class UIComponent extends Component{
 
 			@Override
 			public void run() {
-				window.show();
 				processMessages();
 			}
 			
@@ -58,8 +57,9 @@ public class UIComponent extends Component{
 	}
 	
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		_stop.set(true);
+		notifyAll();
 	}
 	
 	private synchronized void processMessages(){
@@ -69,6 +69,9 @@ public class UIComponent extends Component{
 			while(inboundMessages.isEmpty()){
 				try {
 					wait();
+					if(_stop.get()){
+						return;
+					}
 				} catch (InterruptedException e) {
 					log(e.getMessage());
 					print(e.getMessage());

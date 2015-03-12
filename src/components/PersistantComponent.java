@@ -56,6 +56,10 @@ public class PersistantComponent extends Component {
 					&& inboundLoadMessages.isEmpty()) {
 				try {
 					wait();
+					if(_stop.get()){
+						print("Stopped");
+						return;
+					}
 				} catch (InterruptedException e) {
 					print(e.getMessage() + "\n" + e.getStackTrace());
 					log(e.getMessage());
@@ -130,8 +134,9 @@ public class PersistantComponent extends Component {
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		_stop.set(true);
+		notifyAll();
 	}
 
 	@Override

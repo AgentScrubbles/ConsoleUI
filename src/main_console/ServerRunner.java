@@ -1,5 +1,7 @@
 package main_console;
 
+import java.util.Scanner;
+
 import components.Component;
 import components.ConsoleOutputComponent;
 import components.LoggingComponent;
@@ -14,7 +16,7 @@ public class ServerRunner {
 	private static final int LISTEN_PORT = 48182;
 	
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) throws InterruptedException {		
 		Component console = new ConsoleOutputComponent();
 		Component logger = new LoggingComponent();
 		UIComponent uiComponent = new UIComponent(logger, console);
@@ -29,6 +31,22 @@ public class ServerRunner {
 		parserComponent.start();
 		serverListener.start();
 		persistantComponent.start();
+		
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Enter 'q' to quit.");
+		while(keyboard.next().charAt(0) != 'q'){
+			System.out.println(ServerRunner.class + "Unknown command");
+		}
+		
+		uiComponent.stop();
+		parserComponent.stop();
+		serverListener.stop();
+		persistantComponent.stop();
+		
+		Thread.sleep(3000);
+
+		console.stop();
+		logger.stop();
 	}
 	
 

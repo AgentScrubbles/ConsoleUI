@@ -86,7 +86,13 @@ public class ParserComponent extends Component {
 			while (_inboundQueue.isEmpty()) {
 				try {
 					wait();
-				} catch (InterruptedException ignore) {
+					if(_stop.get()){
+						print("Stopped.");
+						return;
+					}
+				} catch (InterruptedException e) {
+					print("InterruptedException: " + e);
+					log("InterruptedException: " + e);
 				}
 			}
 			try {
@@ -100,13 +106,12 @@ public class ParserComponent extends Component {
 				log(ex.getMessage());
 			}
 		}
-		log("Stopped.");
-		print("Stopped.");
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
 		_stop.set(true);
+		notifyAll();
 	}
 
 }
