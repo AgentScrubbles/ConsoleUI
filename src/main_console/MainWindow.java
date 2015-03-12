@@ -47,6 +47,10 @@ public class MainWindow extends JFrame {
 		this.padding = padding;
 		this.x = padding;
 		this.y = padding;
+		
+	}
+	
+	public void show(){
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

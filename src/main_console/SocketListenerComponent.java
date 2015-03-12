@@ -99,7 +99,6 @@ public class SocketListenerComponent extends Component {
 
 	@Override
 	public void start() {
-		print("Server started.");
 		new Thread(new Runnable() {
 
 			@Override
@@ -107,7 +106,7 @@ public class SocketListenerComponent extends Component {
 				startConnection();
 			}
 
-		});
+		}).start();
 	}
 
 	@Override
