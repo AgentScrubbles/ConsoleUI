@@ -13,12 +13,13 @@ import components.UIComponent;
 public class ServerRunner {
 
 	private static final String SAVE_FILE_PATH = "savedinfo.txt";
+	private static final String LOG_FILE_PATH = "logfile.txt";
 	private static final int LISTEN_PORT = 48182;
 	
 	
 	public static void main(String[] args) throws InterruptedException {		
 		Component console = new ConsoleOutputComponent();
-		Component logger = new LoggingComponent();
+		Component logger = new LoggingComponent(LOG_FILE_PATH);
 		UIComponent uiComponent = new UIComponent(logger, console);
 		Component parserComponent = new ParserComponent(logger, console, uiComponent);
 		Component persistantComponent = new PersistantComponent(logger, console, parserComponent, SAVE_FILE_PATH);
@@ -48,6 +49,7 @@ public class ServerRunner {
 
 		console.stop();
 		logger.stop();
+		System.out.println("Complete.");
 	}
 	
 

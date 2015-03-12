@@ -1,5 +1,8 @@
 package components;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -10,9 +13,11 @@ public class LoggingComponent extends Component{
 
 	private ConcurrentLinkedQueue<TextMessage> inboundMessages;
 	private AtomicBoolean _stop;
+	private final String _filepath;
 	
-	public LoggingComponent() {
+	public LoggingComponent(String filepath) {
 		super(null, null);
+		_filepath = filepath;
 		inboundMessages = new ConcurrentLinkedQueue<TextMessage>();
 		_stop = new AtomicBoolean(false);
 	}
@@ -24,11 +29,14 @@ public class LoggingComponent extends Component{
 	}
 
 	private synchronized void processMessages(){
+		logMessage(generateClassString() + "Started");
 		while(!_stop.get()){
 			while(inboundMessages.isEmpty()){
 				try {
 					wait();
 					if(_stop.get()){
+						logMessage(generateClassString() + "Stopped");
+						logMessage(lineBreak());
 						return;
 					}
 				} catch (InterruptedException ignore) { //Nothing we can do, we are the logger
@@ -40,7 +48,21 @@ public class LoggingComponent extends Component{
 	}
 	
 	private void logMessage(String msg){
-		//TODO
+		try {
+			BufferedWriter writer = new BufferedWriter(
+					new FileWriter(_filepath));
+			writer.append(msg + "\n");
+			writer.close();
+		} catch (IOException ingnore) {
+		}
+	}
+	
+	private String lineBreak(){
+		String line = "";
+		for(int i = 0; i < 20; i++){
+			line += "-";
+		}
+		return line;
 	}
 	
 	@Override

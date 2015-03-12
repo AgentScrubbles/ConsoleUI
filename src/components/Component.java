@@ -37,9 +37,13 @@ public abstract class Component {
 				printString));
 	}
 
-	private String generateClassString(){
+	protected String generateClassString(){
 		Date d = new Date();
-		return "[ " + d.toString() + " ] [ " + this.getClass().getSimpleName() + " ] ";
+		return "[ " + d.toString() + " ] [ " + getFriendlyName() + " ] ";
+	}
+	
+	protected String getFriendlyName(){
+		return this.getClass().getSimpleName();
 	}
 	
 
