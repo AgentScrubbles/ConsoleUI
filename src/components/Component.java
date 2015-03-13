@@ -38,8 +38,7 @@ public abstract class Component {
 	}
 
 	protected String generateClassString(){
-		Date d = new Date();
-		return "[ " + d.toString() + " ] [ " + getFriendlyName() + " ] ";
+		return "[ " + new Date().toString() + " ] [ " + getFriendlyName() + " ] ";
 	}
 	
 	protected String getFriendlyName(){

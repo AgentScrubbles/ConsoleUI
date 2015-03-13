@@ -49,18 +49,16 @@ public class MainWindow extends JFrame {
 		this.padding = padding;
 		this.x = padding;
 		this.y = padding;
-		show();
-		
-	}
-	
-	public void show(){
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				initComponents();
 			}
 		});
+		
 	}
+	
+	
 
 	private void initComponents() {
 
