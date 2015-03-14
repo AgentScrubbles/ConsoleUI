@@ -1,8 +1,12 @@
 package console_ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.text.DateFormat;
@@ -19,12 +23,14 @@ import javax.swing.SwingUtilities;
 
 import main_console.IValues;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JPanel {
 
+	private static final int FONT_SIZE = 20;
+	
 	private Font labelFont;
 	private JLabel firstLabel;
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-	private List<Box> boxes;
+	private ArrayList<Box> boxes;
 	private Dimension screen;
 	private JPanel mainPanel;
 	private int numBoxesWidth;
@@ -55,23 +61,65 @@ public class MainWindow extends JFrame {
 				initComponents();
 			}
 		});
-		
+
 	}
-	
-	
 
 	private void initComponents() {
 
-		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		firstLabel = new JLabel();
 		// firstLabel.setFont(labelFont);
 		firstLabel.setText("Data for " + dateFormat.format(new Date()));
 		MainWindow.this.add(firstLabel, BorderLayout.PAGE_START);
-		MainWindow.this.pack();
 		this.setVisible(true);
 	}
+
+	private void initializeBoxes() {
+
+		// Center the word in the window, if possible; otherwise keep
+		// a minimum left margin of one letter width
+		int totalWidth = (boxes.size() - 1) * padding + boxWidth();
+		int windowWidth = Math.max(getWidth(), totalWidth + 2 * boxWidth());
+		int leftMargin = (windowWidth - totalWidth) / 2;
+		leftMargin = Math.max(leftMargin, boxWidth());
+
+		
+	}
+	
+	  @Override
+	  public void paintComponent(Graphics g)
+	  {
+	    
+	    Graphics2D g2 = (Graphics2D) g;
+	    Color savedColor = g2.getColor();
+	    g2.setBackground(Color.LIGHT_GRAY);
+	    g2.clearRect(0, 0, getWidth(), getHeight());
+
+	    // paint the rectangles...
+	    for (int i = 0; i < boxes.size(); ++i)
+	    {
+	      Box r = boxes.get(i);
+	      g2.setColor(Color.WHITE);
+
+	      g2.fillRect(r.x + 1, r.y + 1, r.width() - 2, r.height() - 2);
+	      g2.setColor(Color.BLACK);
+	      g2.draw(r);
+	      
+	      Font f = new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE);
+	      g2.setFont(f);
+	      FontMetrics fm = g2.getFontMetrics(f);
+	      String text = "" + r.values().name();
+	      int h = fm.getHeight();
+	      int w = fm.stringWidth(text);
+	      int x = r.x + r.width() / 2 - (w / 2);
+	      int y = r.y + r.height() / 2 + (h / 2) - 2;
+	      g2.drawString(text, x, y);
+
+	      g2.setColor(savedColor);
+	    }
+	  }
 
 	/**
 	 * If IValues is implemented as thread safe (immutable is best), then this
@@ -85,43 +133,33 @@ public class MainWindow extends JFrame {
 			@Override
 			public void run() {
 				boxes.clear();
-				mainPanel = new JPanel();
-				GridLayout mainPanelLayout = new GridLayout(numBoxesWidth, numBoxesHeight);
-				mainPanelLayout.setHgap(padding);
-				mainPanelLayout.setVgap(padding);
-				mainPanel.setLayout(mainPanelLayout);
+				//mainPanel = new JPanel();
+				//GridLayout mainPanelLayout = new GridLayout(numBoxesWidth,
+				//		numBoxesHeight);
+				//mainPanelLayout.setHgap(padding);
+				//mainPanelLayout.setVgap(padding);
+				//mainPanel.setLayout(mainPanelLayout);
 				for (IValues vals : values) {
 					Box box = new Box(labelFont, labelFont, vals);
 					box.paintComponent();
-					boxes.add(box);
-					mainPanel.add(box);
 					
+					// set character and x, y position for each rectangle
+					
+						int x = padding + boxes.size() * padding;
+						box.setLocation(x, y);
+						boxes.add(box);
+						//mainPanel.add(box);
+
 				}
-				mainPanel.repaint();
-				mainPanel.setVisible(true);
-				MainWindow.this.add(mainPanel, BorderLayout.CENTER);
+				//mainPanel.repaint();
+				//mainPanel.setVisible(true);
+				//MainWindow.this.add(mainPanel, BorderLayout.CENTER);
 				MainWindow.this.repaint();
 			}
 		});
 	}
 
-	@SuppressWarnings("unused")
-	private Point generateNextLocation() {
-		Point acceptable = new Point(x, y);
-		x += boxWidth() + padding;
-		if (x >= screen.width) {
-			x = padding;
-			y = y + padding + boxHeight();
-		}
-		return acceptable;
-	}
-
-	private int boxWidth() {
-		return (screen.width - (numBoxesWidth * padding)) / numBoxesWidth;
-	}
-
-	private int boxHeight() {
-		return (screen.height - (numBoxesHeight * padding)) / numBoxesHeight;
-	}
+	
+	
 
 }

@@ -3,30 +3,33 @@ package components;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.JFrame;
+
 import messages.ErrorMessage;
 import messages.IMessage;
 import messages.LoadMessage;
 import messages.UIMessage;
 import console_ui.MainWindow;
 
-public class UIComponent extends Component{
+public class UIComponent extends Component {
 
 	private ConcurrentLinkedQueue<UIMessage> inboundMessages;
 	private Component _loadComponent;
 	private AtomicBoolean _stop;
 	private MainWindow window;
-	
+	private JFrame frame;
+
 	public UIComponent(Component logger, Component console) {
 		super(logger, console);
 		inboundMessages = new ConcurrentLinkedQueue<UIMessage>();
 		_stop = new AtomicBoolean(false);
-		window = new MainWindow(5, 3, 50);
+		bigBang();
 	}
 
-	public void setLoader(Component c){
+	public void setLoader(Component c) {
 		_loadComponent = c;
 	}
-	
+
 	@Override
 	public void send(IMessage message) {
 		message.dispatch(this);
@@ -34,42 +37,59 @@ public class UIComponent extends Component{
 
 	@Override
 	public void start() {
-		new Thread(new Runnable(){
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				processMessages();
 			}
-			
+
 		}).start();
+	}
+
+	public void bigBang() {
+		// user interface (this is how God controls the universe)
+		window = new MainWindow(5, 3, 50);
+		frame = new JFrame();
+		frame.getContentPane().add(window);
+		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+
+		// size the frame based on the preferred size of the panel
+		frame.pack();
+
+		// make sure it closes when you click the close button on the window
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// and on the 6th day...
+		frame.setVisible(true);
+
 	}
 
 	/**
 	 * Requests a message from the loadComponent to load the latest message.
-	 * Thread-safe
-	 * Must have LoadComponent set
+	 * Thread-safe Must have LoadComponent set
 	 */
-	public void loadSavedValues(){
+	public void loadSavedValues() {
 		IMessage msg = new LoadMessage(this, IntGenerator.generateCorrelation());
-		if(_loadComponent != null){
+		if (_loadComponent != null) {
 			_loadComponent.send(msg);
 		}
 	}
-	
+
 	@Override
 	public synchronized void stop() {
 		_stop.set(true);
 		notifyAll();
 	}
-	
-	private synchronized void processMessages(){
+
+	private synchronized void processMessages() {
 		print("Started");
 		loadSavedValues();
-		while(!_stop.get()){
-			while(inboundMessages.isEmpty()){
+		while (!_stop.get()) {
+			while (inboundMessages.isEmpty()) {
 				try {
 					wait();
-					if(_stop.get()){
+					if (_stop.get()) {
 						return;
 					}
 				} catch (InterruptedException e) {
@@ -83,15 +103,15 @@ public class UIComponent extends Component{
 		}
 		print("Stopped");
 	}
-	
+
 	@Override
-	public synchronized void handle(UIMessage msg){
+	public synchronized void handle(UIMessage msg) {
 		inboundMessages.add(msg);
 		notifyAll();
 	}
-	
+
 	@Override
-	public synchronized void handle(ErrorMessage msg){
+	public synchronized void handle(ErrorMessage msg) {
 		print(msg.getError());
 	}
 

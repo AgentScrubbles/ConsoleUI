@@ -1,50 +1,53 @@
 package console_ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import main_console.IValues;
 
-public class Box extends JPanel {
+public class Box extends Rectangle {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2930160163094115692L;
-	private int pos_X;
-	private int pos_Y;
 	private int width;
 	private int height;
 	private IValues values; // Immutable and thread safe
 	private Font bigFont;
 	private Font smallFont;
 	private Color backgroundColor;
-	private boolean manualPositioning;
 
-	public Box(final int loc_x, final int loc_y, int width, int height,
-			Font bigFont, Font smallFont, IValues values) {
-		this.pos_X = loc_x;
-		this.pos_Y = loc_y;
+	public Box(int width, int height, Font bigFont, Font smallFont,
+			IValues values) {
+		
+		super(0, 0, width, height);
 		this.width = width;
 		this.height = height;
 		this.bigFont = bigFont;
 		this.smallFont = smallFont;
 		this.values = values;
 		this.backgroundColor = Color.WHITE;
-		manualPositioning = true;
 	}
-	
-	public Box(Font bigFont, Font smallFont, IValues values){
+
+	public Box(Font bigFont, Font smallFont, IValues values) {
 		this.bigFont = bigFont;
 		this.smallFont = smallFont;
 		this.values = values;
-		manualPositioning = false;
+	}
+	
+	public int width(){
+		return width;
+	}
+	
+	public int height(){
+		return height;
+	}
+	
+	public IValues values(){
+		return values;
 	}
 
 	/**
@@ -53,12 +56,6 @@ public class Box extends JPanel {
 	 * @param parentPanel
 	 */
 	public void paintComponent() {
-		if (manualPositioning) {
-			this.setPreferredSize(new Dimension(width, height));
-			this.setLocation(pos_X, pos_Y);
-		}
-		this.setLayout(new BorderLayout());
-		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		JLabel nameLabel = new JLabel(values.name());
 		nameLabel.setFont(bigFont);
@@ -73,13 +70,5 @@ public class Box extends JPanel {
 		goalLabel.setFont(smallFont);
 		goalLabel.setVisible(true);
 
-		this.add(nameLabel, BorderLayout.PAGE_START);
-		this.add(currentLabel, BorderLayout.LINE_START);
-		this.add(monthLabel, BorderLayout.CENTER);
-		this.add(goalLabel, BorderLayout.LINE_END);
-
-		this.setBackground(backgroundColor);
-		this.setVisible(true);
-		this.repaint();
 	}
 }
