@@ -1,5 +1,6 @@
 package components;
 
+import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.FocusEvent;
@@ -58,33 +59,12 @@ public class UIComponent extends Component {
 		frame.getContentPane().add(window);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 
-		// size the frame based on the preferred size of the panel
-		frame.pack();
+		fullScreen(frame, true);
 
 		// make sure it closes when you click the close button on the window
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		GraphicsDevice d = GraphicsEnvironment
-			    .getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			if (d.isFullScreenSupported()) {
-			    frame.setUndecorated(true);
-			    frame.setResizable(false);
-			    frame.addFocusListener(new FocusListener() {
-
-			        @Override
-			        public void focusGained(FocusEvent arg0) {
-			            frame.setAlwaysOnTop(true);
-			        }
-
-			        @Override
-			        public void focusLost(FocusEvent arg0) {
-			            frame.setAlwaysOnTop(false);
-			        }
-			    });
-			    d.setFullScreenWindow(frame);
-			} else {
-			    frame.setVisible(true);
-			}
+		
 
 	}
 
@@ -136,6 +116,57 @@ public class UIComponent extends Component {
 	@Override
 	public synchronized void handle(ErrorMessage msg) {
 		print(msg.getError());
+	}
+	
+	/**
+	 * @param frame
+	 * @param doPack
+	 * @return device.isFullScreenSupported
+	 */
+	private static boolean fullScreen(final JFrame frame, boolean doPack) {
+
+	    GraphicsDevice device = frame.getGraphicsConfiguration().getDevice();
+	    boolean result = device.isFullScreenSupported();
+
+	    if (result) {
+	        frame.setUndecorated(true);
+	        frame.setResizable(true);
+
+	        frame.addFocusListener(new FocusListener() {
+
+	            @Override
+	            public void focusGained(FocusEvent arg0) {
+	                frame.setAlwaysOnTop(true);
+	            }
+
+	            @Override
+	            public void focusLost(FocusEvent arg0) {
+	                frame.setAlwaysOnTop(false);
+	            }
+	        });
+
+	        if (doPack)
+	            frame.pack();
+
+	        device.setFullScreenWindow(frame);
+	    }
+	    else {
+	        frame.setPreferredSize(frame.getGraphicsConfiguration().getBounds().getSize());
+
+	        if (doPack)
+	            frame.pack();
+
+	        frame.setResizable(true);
+
+	        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+	        boolean successful = frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
+
+	        frame.setVisible(true);
+
+	        if (!successful)
+	            frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+	    }
+	    return result;
 	}
 
 }
