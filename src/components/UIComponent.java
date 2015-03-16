@@ -1,5 +1,9 @@
 package components;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -60,8 +64,27 @@ public class UIComponent extends Component {
 		// make sure it closes when you click the close button on the window
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// and on the 6th day...
-		frame.setVisible(true);
+		GraphicsDevice d = GraphicsEnvironment
+			    .getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			if (d.isFullScreenSupported()) {
+			    frame.setUndecorated(true);
+			    frame.setResizable(false);
+			    frame.addFocusListener(new FocusListener() {
+
+			        @Override
+			        public void focusGained(FocusEvent arg0) {
+			            frame.setAlwaysOnTop(true);
+			        }
+
+			        @Override
+			        public void focusLost(FocusEvent arg0) {
+			            frame.setAlwaysOnTop(false);
+			        }
+			    });
+			    d.setFullScreenWindow(frame);
+			} else {
+			    frame.setVisible(true);
+			}
 
 	}
 
