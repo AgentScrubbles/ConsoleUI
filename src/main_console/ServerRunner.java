@@ -24,7 +24,7 @@ public class ServerRunner {
 		if(args.length > 0){
 			try{
 				numBoxesAcross = Integer.parseInt(args[0]);
-				numBoxesAcross = Integer.parseInt(args[1]);
+				numBoxesDown = Integer.parseInt(args[1]);
 			} catch (Exception ex){
 				System.out.println("Please run as:");
 				System.out.println("\t$ ServerRunner numBoxesAcross numBoxesDown");
