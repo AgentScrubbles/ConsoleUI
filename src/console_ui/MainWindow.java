@@ -8,8 +8,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +31,7 @@ public class MainWindow extends JPanel {
 	private Dimension screen;
 	private int numBoxesWidth;
 	private int numBoxesHeight;
+	private int maxBoxes;
 	private int padding;
 	private int heightPadding;
 	private Point currentLocation;
@@ -57,12 +56,12 @@ public class MainWindow extends JPanel {
 		this.heightPadding = heightPadding;
 		this.numBoxesWidth = numberOfBoxesAcross;
 		this.numBoxesHeight = numberOfBoxesUpDown;
+		this.maxBoxes = numberOfBoxesAcross * numberOfBoxesUpDown;
 		this.padding = padding;
 		this.currentLocation = new Point(padding, padding);
 		this.goodColor = new Color(127, 224, 143);
 		this.badColor = new Color(253, 100, 100);
 		this.backgroundColor = new Color(244, 123, 41);
-		this.addMouseListener(new MoveBoxesLeft(5));
 		this.clearOrMove = true; // Clear the screen
 		animating = new AtomicBoolean(false);
 
@@ -142,6 +141,10 @@ public class MainWindow extends JPanel {
 				text = "Goal: " + r.values().goal();
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
+				
+				text = "(" + r.x + ", " + r.y + ")";
+				Point sthLoc = generateBelowTextLocation(fm, text, r, fthLoc);
+				g2.drawString(text, sthLoc.x, sthLoc.y);
 
 				g2.setColor(savedColor);
 			}
@@ -158,8 +161,7 @@ public class MainWindow extends JPanel {
 	public void UpdateValues(final Collection<IValues> values) {
 
 		if (boxes.size() > 0) { // Move current items off screen
-			new MoveBoxesLeft(10).moveLeft(); // Will move everything an make
-												// this wait.
+			scrollBoxesLeft();									// this wait.
 
 			try {
 				Thread.sleep(100);
@@ -188,8 +190,12 @@ public class MainWindow extends JPanel {
 						box.paintComponent();
 						boxes.add(box);
 					}
+					if(boxes.size() > maxBoxes){
+						startAutoScroll();
+					}
 				}
 				MainWindow.this.repaint();
+				
 			}
 		});
 	}
@@ -220,7 +226,7 @@ public class MainWindow extends JPanel {
 	private Point generateLocation() {
 		synchronized (currentLocation) {
 			Point p = new Point(currentLocation.x, currentLocation.y);
-			//Get ready for the next one
+			// Get ready for the next one
 			currentLocation.x += (boxWidth() + padding);
 			if (currentLocation.x > (screen.getWidth() - padding - boxWidth())) {
 				// Create new row
@@ -249,75 +255,93 @@ public class MainWindow extends JPanel {
 		return new Point(x, y);
 	}
 
-	class MoveBoxesLeft implements MouseListener {
+	private void scrollBoxesLeft() {
+		new Thread(new Animator(10, -10, 0)).start();
+	}
 
+	private void scrollBoxesDown(){
+		new Thread(new Animator(10, 0, -10)).start();
+	}
+	
+	private void scrollBoxesUp(){
+		new Thread(new Animator(10, 0, 10)).start();
+	}
+	
+	private void startAutoScroll(){
+		Runnable scroller = new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //Let everything in the UI catch up before we start scrolling
+				while(boxes.size() > maxBoxes){
+					//Scroll down
+					
+					try {
+						scrollBoxesUp();
+						Thread.sleep(5000); //Sleep for 5 seconds, then scroll back up
+						scrollBoxesDown();
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} //Repeat until boxes has updated.
+				}
+			}
+		};
+		new Thread(scroller).start();
+	}
+	
+	class Animator implements Runnable {
 		// private Random rand = new Random(100);
 		private final int sleepTime;
+		private final int xDirChange;
+		private final int yDirChange;
 
-		public MoveBoxesLeft(int sleepTime) {
+		public Animator(int sleepTime, int xDirChange, int yDirChange) {
 			this.sleepTime = sleepTime;
+			this.xDirChange = xDirChange;
+			this.yDirChange = yDirChange;
 		}
 
-		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			moveLeft();
-		}
-
-		public void moveLeft() {
-			Runnable r = new Runnable() {
-
-				@Override
-				public void run() {
-					synchronized (animating) {
-						animating.set(true);
-					}
-					clearOrMove = false;
-					int amnt = 10;
-					for (int i = 0; i < screen.getWidth(); i += amnt) {
-						for (Box b : boxes) {
-							b.changeCoordinates(-amnt, 0);
-						}
-						MainWindow.this.repaint();
-
-						try {
-							Thread.sleep(sleepTime);
-						} catch (InterruptedException ingore) {
-						}
-					}
-					// Absolutely terrible, but just in case, make this wait for
-					// everything to finish on the event thread
-					/**
-					 * try { Thread.sleep(sleepTime * boxes.size()); } catch
-					 * (InterruptedException e) {
-					 * block e.printStackTrace(); }
-					 **/
-
-					synchronized (animating) {
-						clearOrMove = true; // Ready to fill again
-						animating.set(false);
-						animating.notifyAll();
-					}
-
+		public void moveBoxes() {
+			synchronized (animating) {
+				animating.set(true);
+			}
+			clearOrMove = false;
+			int amnt = 10;
+			for (int i = 0; i < screen.getWidth(); i += amnt) {
+				for (Box b : boxes) {
+					b.changeCoordinates(xDirChange, yDirChange);
 				}
+				MainWindow.this.repaint();
 
-			};
-			new Thread(r).start();
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException ingore) {
+				}
+			}
+			// Absolutely terrible, but just in case, make this wait for
+			// everything to finish on the event thread
+			/**
+			 * try { Thread.sleep(sleepTime * boxes.size()); } catch
+			 * (InterruptedException e) { block e.printStackTrace(); }
+			 **/
+
+			synchronized (animating) {
+				clearOrMove = true; // Ready to fill again
+				animating.set(false);
+				animating.notifyAll();
+			}
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
+		public void run() {
+			moveBoxes();
 		}
 
 	}

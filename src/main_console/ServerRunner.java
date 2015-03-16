@@ -29,6 +29,9 @@ public class ServerRunner {
 				System.out.println("Please run as:");
 				System.out.println("\t$ ServerRunner numBoxesAcross numBoxesDown");
 			}
+		} else {
+			numBoxesAcross = 4;
+			numBoxesDown = 3;
 		}
 		
 		Component console = new ConsoleOutputComponent();

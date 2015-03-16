@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import messages.ErrorMessage;
 import messages.IMessage;
@@ -63,14 +64,25 @@ public class UIComponent extends Component {
 		frame.getContentPane().add(window);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 
-		fullScreen(frame, true);
-
+		if(isUnix()){
+			fullScreen(frame, true);
+		} else {
+			frame.pack();
+			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+			frame.setVisible(true);
+		}
+		
+		
 		// make sure it closes when you click the close button on the window
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		
 
 	}
+	private static String OS = System.getProperty("os.name").toLowerCase();
+	   public static boolean isUnix() {
+	        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+	    }
 
 	/**
 	 * Requests a message from the loadComponent to load the latest message.
