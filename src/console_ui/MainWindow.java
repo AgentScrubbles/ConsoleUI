@@ -7,16 +7,16 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -24,8 +24,6 @@ import javax.swing.SwingUtilities;
 import main_console.IValues;
 
 public class MainWindow extends JPanel {
-
-	private static final int FONT_SIZE = 20;
 
 	private Font labelFont;
 	private Font secondaryFont;
@@ -40,6 +38,9 @@ public class MainWindow extends JPanel {
 	private Point currentLocation;
 	private Color goodColor;
 	private Color badColor;
+	private Color backgroundColor;
+	private boolean clearOrMove;
+	private AtomicBoolean animating;
 
 	/**
 	 * 
@@ -49,7 +50,7 @@ public class MainWindow extends JPanel {
 	public MainWindow(int numberOfBoxesAcross, int numberOfBoxesUpDown,
 			int padding, int heightPadding) {
 
-		labelFont = new Font("FUTURA", Font.PLAIN, 20);
+		labelFont = new Font("FUTURA", Font.PLAIN, 22);
 		secondaryFont = new Font("FUTURA", Font.PLAIN, 12);
 		boxes = new ArrayList<Box>();
 		screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -60,6 +61,10 @@ public class MainWindow extends JPanel {
 		this.currentLocation = new Point(padding, padding);
 		this.goodColor = new Color(127, 224, 143);
 		this.badColor = new Color(253, 100, 100);
+		this.backgroundColor = new Color(244, 123, 41);
+		this.addMouseListener(new MoveBoxesLeft(5));
+		this.clearOrMove = true; // Clear the screen
+		animating = new AtomicBoolean(false);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -71,7 +76,7 @@ public class MainWindow extends JPanel {
 	}
 
 	private void initComponents() {
-		
+
 		// setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
@@ -88,20 +93,25 @@ public class MainWindow extends JPanel {
 		synchronized (boxes) {
 			Graphics2D g2 = (Graphics2D) g;
 			Color savedColor = g2.getColor();
-			g2.setBackground(Color.LIGHT_GRAY);
-			g2.clearRect(0, 0, getWidth(), getHeight());
 
-			resetLocation();
-			
+			g2.setBackground(this.backgroundColor);
+			g2.clearRect(0, 0, getWidth(), getHeight());
+			if (clearOrMove) {
+				resetLocation();
+			}
 			// paint the rectangles...
 			for (int i = 0; i < boxes.size(); ++i) {
 				Box r = boxes.get(i);
 				g2.setColor(r.backgroundColor());
 
-				// Get the next open point
-				Point p = generateLocation();
-				r.x = p.x;
-				r.y = p.y;
+				if (clearOrMove) {
+					// Get the next open point
+					Point p = generateLocation();
+					r.x = p.x;
+					r.y = p.y;
+				} else {
+					// r.x and r.y are already set
+				}
 
 				// Fill Rectangle
 				g2.fillRect(r.x + padding, r.y + padding, r.width(), r.height());
@@ -146,10 +156,31 @@ public class MainWindow extends JPanel {
 	 * @param values
 	 */
 	public void UpdateValues(final Collection<IValues> values) {
+
+		if (boxes.size() > 0) { // Move current items off screen
+			new MoveBoxesLeft(10).moveLeft(); // Will move everything an make
+												// this wait.
+
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ignore) {
+			}
+
+			synchronized (animating) {
+				while (animating.get()) {
+					try {
+						animating.wait();
+					} catch (InterruptedException ignore) {
+					}
+				}
+			}
+		}
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				synchronized (boxes) {
+					clearOrMove = true;
 					boxes.clear();
 					for (IValues vals : values) {
 						Box box = new Box(boxWidth(), boxHeight(), labelFont,
@@ -162,8 +193,8 @@ public class MainWindow extends JPanel {
 			}
 		});
 	}
-	
-	private void setDataLabel(){
+
+	private void setDataLabel() {
 		firstLabel.setText("Data for " + dateFormat.format(new Date()));
 	}
 
@@ -179,13 +210,13 @@ public class MainWindow extends JPanel {
 		return (int) boxWithPaddingHeight - padding;
 	}
 
-	private void resetLocation(){
-		synchronized(currentLocation){
+	private void resetLocation() {
+		synchronized (currentLocation) {
 			currentLocation.x = padding;
 			currentLocation.y = padding;
 		}
 	}
-	
+
 	private Point generateLocation() {
 		synchronized (currentLocation) {
 			currentLocation.x += (boxWidth() + padding);
@@ -214,6 +245,79 @@ public class MainWindow extends JPanel {
 		int x = startPoint.x;
 		int y = startPoint.y + h + 3;
 		return new Point(x, y);
+	}
+
+	class MoveBoxesLeft implements MouseListener {
+
+		// private Random rand = new Random(100);
+		private final int sleepTime;
+
+		public MoveBoxesLeft(int sleepTime) {
+			this.sleepTime = sleepTime;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			moveLeft();
+		}
+
+		public void moveLeft() {
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					synchronized (animating) {
+						animating.set(true);
+					}
+					clearOrMove = false;
+					int amnt = 10;
+					for (int i = 0; i < screen.getWidth(); i += amnt) {
+						for (Box b : boxes) {
+							b.changeCoordinates(-amnt, 0);
+						}
+						MainWindow.this.repaint();
+
+						try {
+							Thread.sleep(sleepTime);
+						} catch (InterruptedException ingore) {
+						}
+					}
+					// Absolutely terrible, but just in case, make this wait for
+					// everything to finish on the event thread
+					/**
+					 * try { Thread.sleep(sleepTime * boxes.size()); } catch
+					 * (InterruptedException e) {
+					 * block e.printStackTrace(); }
+					 **/
+
+					synchronized (animating) {
+						clearOrMove = true; // Ready to fill again
+						animating.set(false);
+						animating.notifyAll();
+					}
+
+				}
+
+			};
+			new Thread(r).start();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
 	}
 
 }

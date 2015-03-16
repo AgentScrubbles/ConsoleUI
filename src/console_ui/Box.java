@@ -40,15 +40,20 @@ public class Box extends Rectangle {
 		this.values = values;
 	}
 	
-	public int width(){
+	public synchronized void changeCoordinates(int x, int y){
+		this.x += x;
+		this.y += y;
+	}
+	
+	public synchronized int width(){
 		return width;
 	}
 	
-	public int height(){
+	public synchronized int height(){
 		return height;
 	}
 	
-	public IValues values(){
+	public synchronized IValues values(){
 		return values;
 	}
 	

@@ -50,7 +50,7 @@ public class LoggingComponent extends Component{
 	private void logMessage(String msg){
 		try {
 			BufferedWriter writer = new BufferedWriter(
-					new FileWriter(_filepath));
+					new FileWriter(_filepath, true));
 			writer.append(msg + "\n");
 			writer.close();
 		} catch (IOException ingnore) {

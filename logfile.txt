@@ -1,1 +1,119 @@
-[ Mon Mar 16 11:51:01 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 11:55:02 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 11:57:13 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 11:58:45 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 11:58:45 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:02:01 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:02:01 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:11:04 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:11:04 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:12:18 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:12:18 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:12:33 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:12:33 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:12:55 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:12:55 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:13:34 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:13:34 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:17:00 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:17:00 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:17:18 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:17:18 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:17:31 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:17:31 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:18:04 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:18:04 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:18:13 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:18:13 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:18:58 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:18:58 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:19:26 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:19:26 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:19:51 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:19:51 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:20:05 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:21:59 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:21:59 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:23:23 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:23:23 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:24:06 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:24:06 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:25:04 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:25:04 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:25:27 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:25:27 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:26:00 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:26:01 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:26:14 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:26:34 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:26:52 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:26:53 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:31:32 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:31:32 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:32:15 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:32:15 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:33:29 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:33:30 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:33:46 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:33:46 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:33:55 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:33:55 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:34:07 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:34:07 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:34:26 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:34:26 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:40:53 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:40:53 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:41:44 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:41:45 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:41:52 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:41:56 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:41:57 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:41:58 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:42:00 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:42:04 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:42:05 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:03 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:43:03 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:07 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:11 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:12 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:13 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:14 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:43:32 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:43:32 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:44:37 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:44:37 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:44:46 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:45:08 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:45:25 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:46:20 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:46:20 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:46:46 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:47:04 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:47:36 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:48:25 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:48:25 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:48:29 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:50:11 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:50:11 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:50:17 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:50:21 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:50:22 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:50:22 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:02 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:51:03 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:12 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:13 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:14 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:15 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:51:18 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:52:55 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:52:55 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:53:05 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:53:11 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:53:17 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:53:21 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:53:25 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:54:11 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 12:54:11 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 12:54:38 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully

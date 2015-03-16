@@ -101,6 +101,7 @@ public class ParserComponent extends Component {
 				JSONMessage jsonMsg = _inboundQueue.poll();
 				List<IValues> completed = parse(jsonMsg.getJSON());
 				print("Parsed JSON data successfully.");
+				log("Parsed JSON data successfully");
 				IMessage uiMsg = new UIMessage(this,
 						jsonMsg.getCorrelationId(), completed);
 				_sendComponent.send(uiMsg);
