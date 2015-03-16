@@ -39,4 +39,10 @@ public class ConcreteValues implements IValues {
 		return _goal;
 	}
 
+	@Override
+	public boolean metGoal() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

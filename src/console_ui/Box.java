@@ -18,10 +18,11 @@ public class Box extends Rectangle {
 	private IValues values; // Immutable and thread safe
 	private Font bigFont;
 	private Font smallFont;
-	private Color backgroundColor;
+	private Color goodBackgroundColor;
+	private Color badBackgroundColor;
 
 	public Box(int width, int height, Font bigFont, Font smallFont,
-			IValues values) {
+			IValues values, Color good, Color bad) {
 		
 		super(0, 0, width, height);
 		this.width = width;
@@ -29,7 +30,8 @@ public class Box extends Rectangle {
 		this.bigFont = bigFont;
 		this.smallFont = smallFont;
 		this.values = values;
-		this.backgroundColor = Color.WHITE;
+		this.goodBackgroundColor = good;
+		this.badBackgroundColor = bad;
 	}
 
 	public Box(Font bigFont, Font smallFont, IValues values) {
@@ -56,6 +58,13 @@ public class Box extends Rectangle {
 	
 	public Font getSecondaryFont(){
 		return smallFont;
+	}
+	
+	public Color backgroundColor(){
+		if(values.metGoal()){
+			return goodBackgroundColor;
+		}
+		return badBackgroundColor;
 	}
 
 	/**
