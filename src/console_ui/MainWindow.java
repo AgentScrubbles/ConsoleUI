@@ -114,7 +114,7 @@ public class MainWindow extends JPanel {
 				}
 
 				// Fill Rectangle
-				g2.fillRect(r.x + padding, r.y + padding, r.width(), r.height());
+				g2.fillRect(r.x, r.y, r.width(), r.height());
 				g2.setColor(Color.BLACK);
 				g2.draw(r);
 
