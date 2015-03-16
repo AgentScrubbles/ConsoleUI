@@ -138,3 +138,12 @@
 [ Mon Mar 16 14:40:09 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
 [ Mon Mar 16 14:42:05 CDT 2015 ] [ LoggingComponent ] Started
 [ Mon Mar 16 14:42:05 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:44:29 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:44:52 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:45:54 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 14:45:54 CDT 2015 ] [ SocketListenerComponent ] Address already in use: JVM_Bind
+[ Mon Mar 16 14:45:54 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:46:40 CDT 2015 ] [ LoggingComponent ] Started
+[ Mon Mar 16 14:46:41 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:46:45 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Mon Mar 16 14:47:10 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully

@@ -284,6 +284,9 @@ public class MainWindow extends JPanel {
 					try {
 						scrollBoxesUp();
 						Thread.sleep(5000); //Sleep for 5 seconds, then scroll back up
+						if(boxes.size() < maxBoxes || animating.get()){
+							return; //Modified while changed
+						}
 						scrollBoxesDown();
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
