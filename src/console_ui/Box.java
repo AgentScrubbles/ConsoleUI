@@ -49,6 +49,14 @@ public class Box extends Rectangle {
 	public IValues values(){
 		return values;
 	}
+	
+	public Font getPrimaryFont(){
+		return bigFont;
+	}
+	
+	public Font getSecondaryFont(){
+		return smallFont;
+	}
 
 	/**
 	 * Paints and adds this panel to the parent

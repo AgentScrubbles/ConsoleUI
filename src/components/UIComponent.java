@@ -49,7 +49,7 @@ public class UIComponent extends Component {
 
 	public void bigBang() {
 		// user interface (this is how God controls the universe)
-		window = new MainWindow(5, 3, 50);
+		window = new MainWindow(10, 6, 10);
 		frame = new JFrame();
 		frame.getContentPane().add(window);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
