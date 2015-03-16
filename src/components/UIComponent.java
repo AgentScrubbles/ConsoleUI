@@ -23,11 +23,15 @@ public class UIComponent extends Component {
 	private AtomicBoolean _stop;
 	private MainWindow window;
 	private JFrame frame;
+	private int numBoxesAcross;
+	private int numBoxesDown;
 
-	public UIComponent(Component logger, Component console) {
+	public UIComponent(Component logger, Component console, int numBoxesAcroos, int numBoxesDown) {
 		super(logger, console);
 		inboundMessages = new ConcurrentLinkedQueue<UIMessage>();
 		_stop = new AtomicBoolean(false);
+		this.numBoxesAcross = numBoxesAcroos;
+		this.numBoxesDown = numBoxesDown;
 		bigBang();
 	}
 
@@ -54,7 +58,7 @@ public class UIComponent extends Component {
 
 	public void bigBang() {
 		// user interface (this is how God controls the universe)
-		window = new MainWindow(6, 4, 10, 15);
+		window = new MainWindow(this.numBoxesAcross, this.numBoxesDown, 10, 15);
 		frame = new JFrame();
 		frame.getContentPane().add(window);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
