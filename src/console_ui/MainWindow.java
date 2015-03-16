@@ -219,13 +219,15 @@ public class MainWindow extends JPanel {
 
 	private Point generateLocation() {
 		synchronized (currentLocation) {
+			Point p = new Point(currentLocation.x, currentLocation.y);
+			//Get ready for the next one
 			currentLocation.x += (boxWidth() + padding);
 			if (currentLocation.x > (screen.getWidth() - padding - boxWidth())) {
 				// Create new row
 				currentLocation.x = padding;
 				currentLocation.y += (boxHeight() + padding);
 			}
-			return (Point) currentLocation.clone();
+			return p;
 		}
 	}
 
