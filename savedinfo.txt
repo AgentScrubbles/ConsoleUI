@@ -1,1 +1,1 @@
-{"values":{"0":{"name":"NPS","current":"40","month":"80","goal":"100","met":false},"1":{"name":"Revenue","current":"80","month":"100","goal":"90","met":true}}}
+{"values":{"0":{"name":"NPS","current":"44","month":"56","goal":"80","met":false},"1":{"name":"Revenue","current":"50","month":"80","goal":"10","met":true}}}
