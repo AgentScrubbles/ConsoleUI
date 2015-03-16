@@ -11,12 +11,14 @@ public class ConcreteValues implements IValues {
 	private final String _current;
 	private final String _month;
 	private final String _goal;
+	private final boolean _goalMet;
 	
-	public ConcreteValues(String name, String current, String month, String goal){
+	public ConcreteValues(String name, String current, String month, String goal, boolean goalMet){
 		_name = name;
 		_current = current;
 		_month = month;
 		_goal = goal;
+		_goalMet = goalMet;
 	}
 	
 	@Override
@@ -41,8 +43,7 @@ public class ConcreteValues implements IValues {
 
 	@Override
 	public boolean metGoal() {
-		// TODO Auto-generated method stub
-		return false;
+		return _goalMet;
 	}
 
 }

@@ -39,20 +39,22 @@ public class ParserComponent extends Component {
 		Type type = new TypeToken<Map<String, Object>>() {
 		}.getType();
 		Gson gson = new Gson();
-		Map<String, Map<String, String>> full = gson.fromJson(jsonString, type);
+		Map<String, Map<String, Map<String, Object>>> full = gson.fromJson(jsonString, type);
 		List<IValues> list = new ArrayList<IValues>();
-		for (String val : full.keySet()) {
-			IValues ivals = mapToValues(val, full.get(val));
-			list.add(ivals);
+		for (String val : full.get("values").keySet()) { //Val should be an Index
+			IValues ivals = mapToValues(full.get("values").get(val));
+			list.add(Integer.parseInt(val), ivals);
 		}
 		return list;
 	}
 
-	private IValues mapToValues(String name, Map<String, String> map) {
-		String current = map.get("current");
-		String month = map.get("month");
-		String goal = map.get("goal");
-		return new ConcreteValues(name, current, month, goal);
+	private IValues mapToValues(Map<String, Object> map) {
+		String name = (String) map.get("name");
+		String current = (String) map.get("current");
+		String month = (String) map.get("month");
+		String goal = (String) map.get("goal");
+		boolean goalMet = (boolean) map.get("met");
+		return new ConcreteValues(name, current, month, goal, goalMet);
 	}
 
 	@Override

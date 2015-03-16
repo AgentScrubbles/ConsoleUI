@@ -58,9 +58,9 @@ public class MainWindow extends JPanel {
 		this.numBoxesHeight = numberOfBoxesUpDown;
 		this.padding = padding;
 		this.currentLocation = new Point(padding, padding);
-		this.goodColor = Color.getHSBColor(129, 43, 87);
-		this.badColor = Color.getHSBColor(0, 60, 99);
-				
+		this.goodColor = new Color(127, 224, 143);
+		this.badColor = new Color(253, 100, 100);
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -71,25 +71,28 @@ public class MainWindow extends JPanel {
 	}
 
 	private void initComponents() {
-
+		
 		// setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		// setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		firstLabel = new JLabel();
 		// firstLabel.setFont(labelFont);
-		firstLabel.setText("Data for " + dateFormat.format(new Date()));
+		setDataLabel();
 		MainWindow.this.add(firstLabel, BorderLayout.PAGE_START);
 		this.setVisible(true);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
+		setDataLabel();
 		synchronized (boxes) {
 			Graphics2D g2 = (Graphics2D) g;
 			Color savedColor = g2.getColor();
 			g2.setBackground(Color.LIGHT_GRAY);
 			g2.clearRect(0, 0, getWidth(), getHeight());
 
+			resetLocation();
+			
 			// paint the rectangles...
 			for (int i = 0; i < boxes.size(); ++i) {
 				Box r = boxes.get(i);
@@ -111,7 +114,8 @@ public class MainWindow extends JPanel {
 				g2.setFont(f);
 				FontMetrics fm = g2.getFontMetrics(f);
 				String text = "" + r.values().name();
-				Point textLoc = generateTextLocation(fm, text, r, -this.heightPadding);
+				Point textLoc = generateTextLocation(fm, text, r,
+						-this.heightPadding);
 				g2.drawString(text, textLoc.x, textLoc.y);
 
 				Font s = r.getSecondaryFont();
@@ -120,11 +124,11 @@ public class MainWindow extends JPanel {
 				text = "Current: " + r.values().current();
 				Point secLoc = generateBelowTextLocation(fm, text, r, textLoc);
 				g2.drawString(text, secLoc.x, secLoc.y);
-				
+
 				text = "Month: " + r.values().month();
 				Point thrLoc = generateBelowTextLocation(fm, text, r, secLoc);
 				g2.drawString(text, thrLoc.x, thrLoc.y);
-				
+
 				text = "Goal: " + r.values().goal();
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
@@ -158,6 +162,10 @@ public class MainWindow extends JPanel {
 			}
 		});
 	}
+	
+	private void setDataLabel(){
+		firstLabel.setText("Data for " + dateFormat.format(new Date()));
+	}
 
 	private int boxWidth() {
 		double boxWithPaddingWidth = (screen.getWidth() / numBoxesWidth)
@@ -171,10 +179,17 @@ public class MainWindow extends JPanel {
 		return (int) boxWithPaddingHeight - padding;
 	}
 
+	private void resetLocation(){
+		synchronized(currentLocation){
+			currentLocation.x = padding;
+			currentLocation.y = padding;
+		}
+	}
+	
 	private Point generateLocation() {
 		synchronized (currentLocation) {
 			currentLocation.x += (boxWidth() + padding);
-			if (currentLocation.x > (screen.getWidth() - padding)) {
+			if (currentLocation.x > (screen.getWidth() - padding - boxWidth())) {
 				// Create new row
 				currentLocation.x = padding;
 				currentLocation.y += (boxHeight() + padding);
@@ -183,7 +198,8 @@ public class MainWindow extends JPanel {
 		}
 	}
 
-	private Point generateTextLocation(FontMetrics fm, String text, Box r, int heightPad) {
+	private Point generateTextLocation(FontMetrics fm, String text, Box r,
+			int heightPad) {
 		int h = fm.getHeight() + heightPad;
 		int w = fm.stringWidth(text);
 		int x = r.x + r.width() / 2 - (w / 2);
