@@ -8,6 +8,7 @@ import messages.JSONMessage;
 import messages.LoadMessage;
 import messages.TextMessage;
 import messages.UIMessage;
+import messages.ValueMessage;
 
 /**
  * Base component type for an actor-style message-passing programming model.
@@ -98,6 +99,10 @@ public abstract class Component {
 
 
 	public void handle(ErrorMessage msg) {
+		handle((IMessage) msg);
+	}
+	
+	public void handle(ValueMessage msg){
 		handle((IMessage) msg);
 	}
 

@@ -12,6 +12,7 @@ import main_console.IValues;
 import messages.IMessage;
 import messages.JSONMessage;
 import messages.UIMessage;
+import messages.ValueMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -102,8 +103,8 @@ public class ParserComponent extends Component {
 				List<IValues> completed = parse(jsonMsg.getJSON());
 				print("Parsed JSON data successfully.");
 				log("Parsed JSON data successfully");
-				IMessage uiMsg = new UIMessage(this,
-						jsonMsg.getCorrelationId(), completed);
+				IMessage uiMsg = new ValueMessage(this,
+						jsonMsg.getCorrelationId(), completed, true);
 				_sendComponent.send(uiMsg);
 			} catch (Exception ex) {
 				print(ex.getMessage());

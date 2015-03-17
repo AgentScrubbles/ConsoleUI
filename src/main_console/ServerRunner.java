@@ -5,15 +5,21 @@ import java.util.Scanner;
 import components.Component;
 import components.ConsoleOutputComponent;
 import components.LoggingComponent;
+import components.NextBusComponent;
 import components.ParserComponent;
 import components.PersistantComponent;
 import components.SocketListenerComponent;
+import components.StagingComponent;
 import components.UIComponent;
 
 public class ServerRunner {
 
 	private static final String SAVE_FILE_PATH = "savedinfo.txt";
 	private static final String LOG_FILE_PATH = "logfile.txt";
+	private static final String NEXTBUS_URL = "http://webservices.nextbus.com/service/publicXMLFeed";
+	private static final String NEXTBUS_AGENCY = "cyride";
+	private static final String NEXTBUS_STOPID = "1045";
+	private static final int NEXTBUS_REFRESHTIME = 5000;
 	private static final int LISTEN_PORT = 48182;
 	
 	
@@ -37,7 +43,9 @@ public class ServerRunner {
 		Component console = new ConsoleOutputComponent();
 		Component logger = new LoggingComponent(LOG_FILE_PATH);
 		UIComponent uiComponent = new UIComponent(logger, console, numBoxesAcross, numBoxesDown);
-		Component parserComponent = new ParserComponent(logger, console, uiComponent);
+		Component stagingComponent = new StagingComponent(logger, console, uiComponent);
+		Component busComponent = new NextBusComponent(logger, console, stagingComponent, NEXTBUS_URL, NEXTBUS_AGENCY, NEXTBUS_STOPID, NEXTBUS_REFRESHTIME);
+		Component parserComponent = new ParserComponent(logger, console, stagingComponent);
 		Component persistantComponent = new PersistantComponent(logger, console, parserComponent, SAVE_FILE_PATH);
 		Component serverListener = new SocketListenerComponent(logger, console, parserComponent, persistantComponent, LISTEN_PORT);
 		uiComponent.setLoader(persistantComponent);
@@ -48,6 +56,8 @@ public class ServerRunner {
 		parserComponent.start();
 		serverListener.start();
 		persistantComponent.start();
+		stagingComponent.start();
+		busComponent.start();
 		
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter 'q' to quit.");

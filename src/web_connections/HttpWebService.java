@@ -26,6 +26,12 @@ public class HttpWebService {
 	public HttpWebService(String url) {
 		_url = url;
 	}
+	
+	public Document callComplete(Map<String, String> params) throws MalformedURLException, IOException, SAXException, ParserConfigurationException{
+
+		InputStream is = callWebService(params);
+		return readXml(is);
+	}
 
 	public InputStream callWebService(Map<String, String> params)
 			throws MalformedURLException, IOException {
