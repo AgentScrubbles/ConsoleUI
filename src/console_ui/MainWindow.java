@@ -197,15 +197,15 @@ public class MainWindow extends JPanel {
 				Font s = r.getSecondaryFont();
 				g2.setFont(s);
 				fm = g2.getFontMetrics(s);
-				text = "Current: " + r.values().current();
+				text = "Current: " + r.values().firstItem();
 				Point secLoc = generateBelowTextLocation(fm, text, r, textLoc);
 				g2.drawString(text, secLoc.x, secLoc.y);
 
-				text = "Month: " + r.values().month();
+				text = "Month: " + r.values().secondItem();
 				Point thrLoc = generateBelowTextLocation(fm, text, r, secLoc);
 				g2.drawString(text, thrLoc.x, thrLoc.y);
 
-				text = "Goal: " + r.values().goal();
+				text = "Goal: " + r.values().thirdItem();
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
 
@@ -254,7 +254,6 @@ public class MainWindow extends JPanel {
 					for (IValues vals : values) {
 						Box box = new Box(boxWidth(), boxHeight(), labelFont,
 								secondaryFont, vals, goodColor, badColor);
-						box.paintComponent();
 						boxes.add(box);
 					}
 					if (boxes.size() > maxBoxes) {

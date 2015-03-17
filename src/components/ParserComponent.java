@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.lang.reflect.Type;
 
-import main_console.ConcreteValues;
+import main_console.GoalValues;
 import main_console.IValues;
 import messages.IMessage;
 import messages.JSONMessage;
@@ -54,7 +54,7 @@ public class ParserComponent extends Component {
 		String month = (String) map.get("month");
 		String goal = (String) map.get("goal");
 		boolean goalMet = (boolean) map.get("met");
-		return new ConcreteValues(name, current, month, goal, goalMet);
+		return new GoalValues(name, current, month, goal, goalMet);
 	}
 
 	@Override

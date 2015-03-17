@@ -66,31 +66,11 @@ public class Box extends Rectangle {
 	}
 	
 	public Color backgroundColor(){
-		if(values.metGoal()){
+		if(values.boolVal()){
 			return goodBackgroundColor;
 		}
 		return badBackgroundColor;
 	}
 
-	/**
-	 * Paints and adds this panel to the parent
-	 * 
-	 * @param parentPanel
-	 */
-	public void paintComponent() {
-
-		JLabel nameLabel = new JLabel(values.name());
-		nameLabel.setFont(bigFont);
-		nameLabel.setVisible(true);
-		JLabel currentLabel = new JLabel("Current:\n" + values.current());
-		currentLabel.setFont(smallFont);
-		currentLabel.setVisible(true);
-		JLabel monthLabel = new JLabel("Month:\n" + values.month());
-		monthLabel.setFont(smallFont);
-		monthLabel.setVisible(true);
-		JLabel goalLabel = new JLabel("Goal:\n" + values.goal());
-		goalLabel.setFont(smallFont);
-		goalLabel.setVisible(true);
-
-	}
+	
 }

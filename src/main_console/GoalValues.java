@@ -5,7 +5,7 @@ package main_console;
  * @author Robert
  *
  */
-public class ConcreteValues implements IValues {
+public class GoalValues implements IValues {
 
 	private final String _name;
 	private final String _current;
@@ -13,7 +13,7 @@ public class ConcreteValues implements IValues {
 	private final String _goal;
 	private final boolean _goalMet;
 	
-	public ConcreteValues(String name, String current, String month, String goal, boolean goalMet){
+	public GoalValues(String name, String current, String month, String goal, boolean goalMet){
 		_name = name;
 		_current = current;
 		_month = month;
@@ -27,22 +27,22 @@ public class ConcreteValues implements IValues {
 	}
 
 	@Override
-	public String current() {
+	public String firstItem() {
 		return _current;
 	}
 
 	@Override
-	public String month() {
+	public String secondItem() {
 		return _month;
 	}
 
 	@Override
-	public String goal() {
+	public String thirdItem() {
 		return _goal;
 	}
 
 	@Override
-	public boolean metGoal() {
+	public boolean boolVal() {
 		return _goalMet;
 	}
 
