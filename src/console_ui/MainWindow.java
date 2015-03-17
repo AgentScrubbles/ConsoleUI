@@ -23,23 +23,90 @@ import main_console.IValues;
 
 public class MainWindow extends JPanel {
 
+	/**
+	 * Font to use for primary label
+	 */
 	private Font labelFont;
+	
+	/**
+	 * Font to use for secondary labels
+	 */
 	private Font secondaryFont;
+	
+	/**
+	 * DateTime at top left
+	 */
 	private JLabel firstLabel;
+	
+	/**
+	 * Format for dates
+	 */
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	
+	/**
+	 * List of boxes, must only be created once as references are passed
+	 */
 	private ArrayList<Box> boxes;
+	
+	/**
+	 * Screen size to play with
+	 */
 	private Dimension screen;
+	
+	/**
+	 * Amount of boxes that can be placed in x-coordinate
+	 */
 	private int numBoxesWidth;
+	
+	/**
+	 * Amount of boxes that can be placed in y-coordinate
+	 */
 	private int numBoxesHeight;
+	
+	/**
+	 * Total amount of boxes on the screen (x * y)
+	 */
 	private int maxBoxes;
+	
+	/**
+	 * Pixel padding between boxes
+	 */
 	private int padding;
+	
+	/**
+	 * Amount of padding in the y direction before the main label on each box
+	 */
 	private int heightPadding;
+	
+	/**
+	 * Current good spot to place a box
+	 */
 	private Point currentLocation;
+	
+	/**
+	 * Color to paint a 'goal met' box
+	 */
 	private Color goodColor;
+	
+	/**
+	 * Color to paint a 'not goal met' box
+	 */
 	private Color badColor;
+	
+	/**
+	 * Background color of this JPanel
+	 */
 	private Color backgroundColor;
-	private boolean clearOrMove;
-	private AtomicBoolean animating;
+	
+	/**
+	 * Reset currentLocation to default for new boxes, or keep where it is
+	 */
+	private AtomicBoolean clearOrMove;
+	
+	/**
+	 * Animator for all objects
+	 */
+	private Animator animator;
 
 	/**
 	 * 
@@ -62,8 +129,8 @@ public class MainWindow extends JPanel {
 		this.goodColor = new Color(127, 224, 143);
 		this.badColor = new Color(253, 100, 100);
 		this.backgroundColor = new Color(244, 123, 41);
-		this.clearOrMove = true; // Clear the screen
-		animating = new AtomicBoolean(false);
+		this.clearOrMove = new AtomicBoolean(true); // Clear the screen
+		this.animator = new Animator(this, boxes, screen, maxBoxes, clearOrMove);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -95,7 +162,7 @@ public class MainWindow extends JPanel {
 
 			g2.setBackground(this.backgroundColor);
 			g2.clearRect(0, 0, getWidth(), getHeight());
-			if (clearOrMove) {
+			if (clearOrMove.get()) {
 				resetLocation();
 			}
 			// paint the rectangles...
@@ -103,7 +170,7 @@ public class MainWindow extends JPanel {
 				Box r = boxes.get(i);
 				g2.setColor(r.backgroundColor());
 
-				if (clearOrMove) {
+				if (clearOrMove.get()) {
 					// Get the next open point
 					Point p = generateLocation();
 					r.x = p.x;
@@ -141,7 +208,7 @@ public class MainWindow extends JPanel {
 				text = "Goal: " + r.values().goal();
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
-				
+
 				text = "(" + r.x + ", " + r.y + ")";
 				Point sthLoc = generateBelowTextLocation(fm, text, r, fthLoc);
 				g2.drawString(text, sthLoc.x, sthLoc.y);
@@ -161,17 +228,17 @@ public class MainWindow extends JPanel {
 	public void UpdateValues(final Collection<IValues> values) {
 
 		if (boxes.size() > 0) { // Move current items off screen
-			scrollBoxesLeft();									// this wait.
+			animator.scrollBoxesLeft(); // this wait.
 
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException ignore) {
 			}
 
-			synchronized (animating) {
-				while (animating.get()) {
+			synchronized (animator.animatingLock()) {
+				while (animator.animatingLock().get()) {
 					try {
-						animating.wait();
+						animator.animatingLock().wait();
 					} catch (InterruptedException ignore) {
 					}
 				}
@@ -182,7 +249,7 @@ public class MainWindow extends JPanel {
 			@Override
 			public void run() {
 				synchronized (boxes) {
-					clearOrMove = true;
+					clearOrMove.set(false);
 					boxes.clear();
 					for (IValues vals : values) {
 						Box box = new Box(boxWidth(), boxHeight(), labelFont,
@@ -190,12 +257,12 @@ public class MainWindow extends JPanel {
 						box.paintComponent();
 						boxes.add(box);
 					}
-					if(boxes.size() > maxBoxes){
-						startAutoScroll();
+					if (boxes.size() > maxBoxes) {
+						animator.startAutoScroll();
 					}
 				}
 				MainWindow.this.repaint();
-				
+
 			}
 		});
 	}
@@ -255,98 +322,6 @@ public class MainWindow extends JPanel {
 		return new Point(x, y);
 	}
 
-	private void scrollBoxesLeft() {
-		new Thread(new Animator(10, -10, 0)).start();
-	}
 
-	private void scrollBoxesDown(){
-		new Thread(new Animator(10, 0, -10)).start();
-	}
-	
-	private void scrollBoxesUp(){
-		new Thread(new Animator(10, 0, 10)).start();
-	}
-	
-	private void startAutoScroll(){
-		Runnable scroller = new Runnable(){
-
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} //Let everything in the UI catch up before we start scrolling
-				while(boxes.size() > maxBoxes){
-					//Scroll down
-					
-					try {
-						scrollBoxesUp();
-						Thread.sleep(5000); //Sleep for 5 seconds, then scroll back up
-						if(boxes.size() < maxBoxes || animating.get()){
-							return; //Modified while changed
-						}
-						scrollBoxesDown();
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} //Repeat until boxes has updated.
-				}
-			}
-		};
-		new Thread(scroller).start();
-	}
-	
-	class Animator implements Runnable {
-		// private Random rand = new Random(100);
-		private final int sleepTime;
-		private final int xDirChange;
-		private final int yDirChange;
-
-		public Animator(int sleepTime, int xDirChange, int yDirChange) {
-			this.sleepTime = sleepTime;
-			this.xDirChange = xDirChange;
-			this.yDirChange = yDirChange;
-		}
-
-		public void moveBoxes() {
-			synchronized (animating) {
-				animating.set(true);
-			}
-			clearOrMove = false;
-			int amnt = 10;
-			for (int i = 0; i < screen.getWidth(); i += amnt) {
-				for (Box b : boxes) {
-					b.changeCoordinates(xDirChange, yDirChange);
-				}
-				MainWindow.this.repaint();
-
-				try {
-					Thread.sleep(sleepTime);
-				} catch (InterruptedException ingore) {
-				}
-			}
-			// Absolutely terrible, but just in case, make this wait for
-			// everything to finish on the event thread
-			/**
-			 * try { Thread.sleep(sleepTime * boxes.size()); } catch
-			 * (InterruptedException e) { block e.printStackTrace(); }
-			 **/
-
-			synchronized (animating) {
-				clearOrMove = true; // Ready to fill again
-				animating.set(false);
-				animating.notifyAll();
-			}
-		}
-
-		@Override
-		public void run() {
-			moveBoxes();
-		}
-
-	}
 
 }
