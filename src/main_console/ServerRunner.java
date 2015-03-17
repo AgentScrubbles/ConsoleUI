@@ -17,10 +17,26 @@ public class ServerRunner {
 	private static final int LISTEN_PORT = 48182;
 	
 	
-	public static void main(String[] args) throws InterruptedException {		
+	public static void main(String[] args) throws InterruptedException {
+		int numBoxesAcross = 0;
+		int numBoxesDown = 0;
+		
+		if(args.length > 0){
+			try{
+				numBoxesAcross = Integer.parseInt(args[0]);
+				numBoxesDown = Integer.parseInt(args[1]);
+			} catch (Exception ex){
+				System.out.println("Please run as:");
+				System.out.println("\t$ ServerRunner numBoxesAcross numBoxesDown");
+			}
+		} else {
+			numBoxesAcross = 4;
+			numBoxesDown = 3;
+		}
+		
 		Component console = new ConsoleOutputComponent();
 		Component logger = new LoggingComponent(LOG_FILE_PATH);
-		UIComponent uiComponent = new UIComponent(logger, console);
+		UIComponent uiComponent = new UIComponent(logger, console, numBoxesAcross, numBoxesDown);
 		Component parserComponent = new ParserComponent(logger, console, uiComponent);
 		Component persistantComponent = new PersistantComponent(logger, console, parserComponent, SAVE_FILE_PATH);
 		Component serverListener = new SocketListenerComponent(logger, console, parserComponent, persistantComponent, LISTEN_PORT);

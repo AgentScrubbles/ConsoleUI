@@ -5,4 +5,5 @@ public interface IValues {
 	public String current();
 	public String month();
 	public String goal();
+	public boolean metGoal();
 }
