@@ -68,7 +68,7 @@ public class NextBusComponent extends Component {
 			IValues values = new BusValues(_agencyTag, _stopID, predictions.get(0), predictions.get(1));
 			List<IValues> list = new ArrayList<IValues>();
 			list.add(values);
-			ValueMessage ui = new ValueMessage(this, IntGenerator.generateCorrelation(), list, true);
+			ValueMessage ui = new ValueMessage(this, IntGenerator.generateCorrelation(), list, false);
 			_receiver.send(ui);
 			try {
 				Thread.sleep(_refreshTime);

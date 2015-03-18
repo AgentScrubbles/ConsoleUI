@@ -19,7 +19,7 @@ public class ServerRunner {
 	private static final String NEXTBUS_URL = "http://webservices.nextbus.com/service/publicXMLFeed";
 	private static final String NEXTBUS_AGENCY = "cyride";
 	private static final String NEXTBUS_STOPID = "1045";
-	private static final int NEXTBUS_REFRESHTIME = 5000;
+	private static final int NEXTBUS_REFRESHTIME = 10000;
 	private static final int LISTEN_PORT = 48182;
 	
 	

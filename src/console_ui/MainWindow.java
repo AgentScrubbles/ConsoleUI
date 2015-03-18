@@ -111,6 +111,9 @@ public class MainWindow extends JPanel {
 	/**
 	 * 
 	 */
+	
+	private ArrayList<Point> boxLocations;
+	
 	private static final long serialVersionUID = -3880026026104218593L;
 
 	public MainWindow(int numberOfBoxesAcross, int numberOfBoxesUpDown,
@@ -128,9 +131,11 @@ public class MainWindow extends JPanel {
 		this.currentLocation = new Point(padding, padding);
 		this.goodColor = new Color(127, 224, 143);
 		this.badColor = new Color(253, 100, 100);
-		this.backgroundColor = new Color(244, 123, 41);
+		//this.backgroundColor = new Color(244, 123, 41);
+		this.backgroundColor = Color.white;
 		this.clearOrMove = new AtomicBoolean(true); // Clear the screen
 		this.animator = new Animator(this, boxes, screen, maxBoxes, clearOrMove);
+		this.boxLocations = new ArrayList<Point>();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -287,6 +292,14 @@ public class MainWindow extends JPanel {
 			currentLocation.x = padding;
 			currentLocation.y = padding;
 		}
+	}
+	
+	private void generateAllLocations(){
+		for(int i = 0; i < maxBoxes; i++){
+			boxLocations.add(i, generateLocation());
+		}
+		currentLocation.x = padding;
+		currentLocation.y = padding;
 	}
 
 	private Point generateLocation() {
