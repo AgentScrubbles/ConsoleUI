@@ -27,6 +27,8 @@ public class NextBusComponent extends Component {
 	final AtomicBoolean _stop;
 	final HttpWebService ws;
 	final Component _receiver;
+	final String friendlyName = "3 Blue South";
+	final String friendlyStop = "#40 Shitlitter";
 
 	public NextBusComponent(Component logger, Component console, Component receiver, String url,
 			String agencyTag, String stopID, int refreshTime) {
@@ -65,7 +67,7 @@ public class NextBusComponent extends Component {
 	private void listen(){
 		while(!_stop.get()){
 			List<Integer> predictions = getPrediction();
-			IValues values = new BusValues(_agencyTag, _stopID, predictions.get(0), predictions.get(1));
+			IValues values = new BusValues(friendlyName, friendlyStop, predictions.get(0), predictions.get(1));
 			List<IValues> list = new ArrayList<IValues>();
 			list.add(values);
 			ValueMessage ui = new ValueMessage(this, IntGenerator.generateCorrelation(), list, false);
@@ -83,6 +85,7 @@ public class NextBusComponent extends Component {
 	@Override
 	public void stop() {
 		_stop.set(true);
+		print("Stopped");
 	}
 
 	public List<Integer> getPrediction() {

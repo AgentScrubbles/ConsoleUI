@@ -21,17 +21,17 @@ public class BusValues implements IValues {
 
 	@Override
 	public String firstItem() {
-		return _first;
+		return "Stop: " + _first;
 	}
 
 	@Override
 	public String secondItem() {
-		return Integer.toString(_timeOne);
+		return "Arriving in " + Integer.toString(_timeOne) + " minutes.";
 	}
 
 	@Override
 	public String thirdItem() {
-		return Integer.toString(_timeTwo);
+		return "Arriving in " + Integer.toString(_timeTwo) + " minutes.";
 	}
 
 	@Override

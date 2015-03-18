@@ -233,7 +233,7 @@ public class MainWindow extends JPanel {
 	public void UpdateValues(final Collection<IValues> values) {
 
 		if (boxes.size() > 0) { // Move current items off screen
-			animator.scrollBoxesLeft(); // this wait.
+			//animator.scrollBoxesLeft(); // this wait.
 
 			try {
 				Thread.sleep(100);

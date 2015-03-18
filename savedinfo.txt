@@ -1,1 +1,1 @@
-{"values":{"0":{"name":"Custom Value","current":"First value","month":"Second value","goal":"Third Value","met":true}}}
+{"values":{"0":{"name":"Rob","current":"Home in 20 minutes","month":"At grocery store","goal":"","met":true}}}
