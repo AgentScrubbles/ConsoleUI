@@ -23,8 +23,6 @@ import main_console.IValues;
 
 public class MainWindow extends JPanel {
 
-	private Font labelFont;
-	private Font secondaryFont;
 	private JLabel firstLabel;
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private ArrayList<Box> boxes;
@@ -35,9 +33,6 @@ public class MainWindow extends JPanel {
 	private int padding;
 	private int heightPadding;
 	private Point currentLocation;
-	private Color goodColor;
-	private Color badColor;
-	private Color backgroundColor;
 	private boolean clearOrMove;
 	private AtomicBoolean animating;
 
@@ -49,8 +44,8 @@ public class MainWindow extends JPanel {
 	public MainWindow(int numberOfBoxesAcross, int numberOfBoxesUpDown,
 			int padding, int heightPadding) {
 
-		labelFont = new Font("FUTURA", Font.PLAIN, 22);
-		secondaryFont = new Font("FUTURA", Font.PLAIN, 12);
+		/** STYLING OPTIONS **/
+		
 		boxes = new ArrayList<Box>();
 		screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.heightPadding = heightPadding;
@@ -59,9 +54,6 @@ public class MainWindow extends JPanel {
 		this.maxBoxes = numberOfBoxesAcross * numberOfBoxesUpDown;
 		this.padding = padding;
 		this.currentLocation = new Point(padding, padding);
-		this.goodColor = new Color(127, 224, 143);
-		this.badColor = new Color(253, 100, 100);
-		this.backgroundColor = new Color(244, 123, 41);
 		this.clearOrMove = true; // Clear the screen
 		animating = new AtomicBoolean(false);
 
@@ -93,7 +85,7 @@ public class MainWindow extends JPanel {
 			Graphics2D g2 = (Graphics2D) g;
 			Color savedColor = g2.getColor();
 
-			g2.setBackground(this.backgroundColor);
+			g2.setBackground(Styler.BACKGROUND_COLOR);
 			g2.clearRect(0, 0, getWidth(), getHeight());
 			if (clearOrMove) {
 				resetLocation();
@@ -101,7 +93,7 @@ public class MainWindow extends JPanel {
 			// paint the rectangles...
 			for (int i = 0; i < boxes.size(); ++i) {
 				Box r = boxes.get(i);
-				g2.setColor(r.backgroundColor());
+				g2.setColor(Styler.BOX_COLOR);
 
 				if (clearOrMove) {
 					// Get the next open point
@@ -114,25 +106,36 @@ public class MainWindow extends JPanel {
 
 				// Fill Rectangle
 				g2.fillRect(r.x, r.y, r.width(), r.height());
-				g2.setColor(Color.BLACK);
+				g2.setColor(Color.BLACK); //Outline
 				g2.draw(r);
 
-				// Set text
-				// Font f = new Font(Font.SANS_SERIF, Font.PLAIN, FONT_SIZE);
-				Font f = r.getPrimaryFont();
+				/** PRIMARY TITLE FOR BOX **/
+				Font f = Styler.FONT_BOX_TITLE;
+				
 				g2.setFont(f);
+				g2.setColor(Styler.FONT_STANDARD_COLOR);
+			
 				FontMetrics fm = g2.getFontMetrics(f);
 				String text = "" + r.values().name();
 				Point textLoc = generateTextLocation(fm, text, r,
 						-this.heightPadding);
 				g2.drawString(text, textLoc.x, textLoc.y);
-
-				Font s = r.getSecondaryFont();
+				
+				/** SECONDARY STRINGS **/
+				Font s = Styler.FONT_SUB_ITEM;
 				g2.setFont(s);
+				if(r.goodOrBad()){
+					g2.setColor(Styler.FONT_GOOD_COLOR);
+				} else {
+					g2.setColor(Styler.FONT_BAD_COLOR);
+				}
+				
 				fm = g2.getFontMetrics(s);
 				text = "Current: " + r.values().current();
 				Point secLoc = generateBelowTextLocation(fm, text, r, textLoc);
 				g2.drawString(text, secLoc.x, secLoc.y);
+				
+				g2.setColor(Styler.FONT_STANDARD_COLOR);
 
 				text = "Month: " + r.values().month();
 				Point thrLoc = generateBelowTextLocation(fm, text, r, secLoc);
@@ -142,10 +145,11 @@ public class MainWindow extends JPanel {
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
 				
+				/** Draws the coordinates 
 				text = "(" + r.x + ", " + r.y + ")";
 				Point sthLoc = generateBelowTextLocation(fm, text, r, fthLoc);
 				g2.drawString(text, sthLoc.x, sthLoc.y);
-
+				**/
 				g2.setColor(savedColor);
 			}
 		}
@@ -185,8 +189,8 @@ public class MainWindow extends JPanel {
 					clearOrMove = true;
 					boxes.clear();
 					for (IValues vals : values) {
-						Box box = new Box(boxWidth(), boxHeight(), labelFont,
-								secondaryFont, vals, goodColor, badColor);
+						Box box = new Box(boxWidth(), boxHeight(), Styler.FONT_BOX_TITLE,
+								Styler.FONT_SUB_ITEM, vals, Styler.FONT_GOOD_COLOR, Styler.FONT_BAD_COLOR);
 						box.paintComponent();
 						boxes.add(box);
 					}
@@ -268,6 +272,7 @@ public class MainWindow extends JPanel {
 	}
 	
 	private void startAutoScroll(){
+		@SuppressWarnings("unused")
 		Runnable scroller = new Runnable(){
 
 			@Override
@@ -293,7 +298,9 @@ public class MainWindow extends JPanel {
 				}
 			}
 		};
-		new Thread(scroller).start();
+		//TODO
+		//FIX AUTO SCROLLER
+		//new Thread(scroller).start();
 	}
 	
 	class Animator implements Runnable {

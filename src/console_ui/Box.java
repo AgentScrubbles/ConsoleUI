@@ -57,19 +57,8 @@ public class Box extends Rectangle {
 		return values;
 	}
 	
-	public Font getPrimaryFont(){
-		return bigFont;
-	}
-	
-	public Font getSecondaryFont(){
-		return smallFont;
-	}
-	
-	public Color backgroundColor(){
-		if(values.metGoal()){
-			return goodBackgroundColor;
-		}
-		return badBackgroundColor;
+	public boolean goodOrBad(){
+		return values.metGoal();
 	}
 
 	/**
