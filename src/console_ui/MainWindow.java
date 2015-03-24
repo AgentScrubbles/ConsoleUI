@@ -45,7 +45,7 @@ public class MainWindow extends JPanel {
 			int padding, int heightPadding) {
 
 		/** STYLING OPTIONS **/
-		
+
 		boxes = new ArrayList<Box>();
 		screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.heightPadding = heightPadding;
@@ -106,35 +106,35 @@ public class MainWindow extends JPanel {
 
 				// Fill Rectangle
 				g2.fillRect(r.x, r.y, r.width(), r.height());
-				g2.setColor(Color.BLACK); //Outline
+				g2.setColor(Color.BLACK); // Outline
 				g2.draw(r);
 
 				/** PRIMARY TITLE FOR BOX **/
 				Font f = Styler.FONT_BOX_TITLE;
-				
+
 				g2.setFont(f);
 				g2.setColor(Styler.FONT_STANDARD_COLOR);
-			
+
 				FontMetrics fm = g2.getFontMetrics(f);
 				String text = "" + r.values().name();
 				Point textLoc = generateTextLocation(fm, text, r,
 						-this.heightPadding);
 				g2.drawString(text, textLoc.x, textLoc.y);
-				
+
 				/** SECONDARY STRINGS **/
 				Font s = Styler.FONT_SUB_ITEM;
 				g2.setFont(s);
-				if(r.goodOrBad()){
+				if (r.goodOrBad()) {
 					g2.setColor(Styler.FONT_GOOD_COLOR);
 				} else {
 					g2.setColor(Styler.FONT_BAD_COLOR);
 				}
-				
+
 				fm = g2.getFontMetrics(s);
 				text = "Current: " + r.values().current();
 				Point secLoc = generateBelowTextLocation(fm, text, r, textLoc);
 				g2.drawString(text, secLoc.x, secLoc.y);
-				
+
 				g2.setColor(Styler.FONT_STANDARD_COLOR);
 
 				text = "Month: " + r.values().month();
@@ -144,12 +144,12 @@ public class MainWindow extends JPanel {
 				text = "Goal: " + r.values().goal();
 				Point fthLoc = generateBelowTextLocation(fm, text, r, thrLoc);
 				g2.drawString(text, fthLoc.x, fthLoc.y);
-				
-				/** Draws the coordinates 
-				text = "(" + r.x + ", " + r.y + ")";
-				Point sthLoc = generateBelowTextLocation(fm, text, r, fthLoc);
-				g2.drawString(text, sthLoc.x, sthLoc.y);
-				**/
+
+				/**
+				 * Draws the coordinates text = "(" + r.x + ", " + r.y + ")";
+				 * Point sthLoc = generateBelowTextLocation(fm, text, r,
+				 * fthLoc); g2.drawString(text, sthLoc.x, sthLoc.y);
+				 **/
 				g2.setColor(savedColor);
 			}
 		}
@@ -165,7 +165,7 @@ public class MainWindow extends JPanel {
 	public void UpdateValues(final Collection<IValues> values) {
 
 		if (boxes.size() > 0) { // Move current items off screen
-			scrollBoxesLeft();									// this wait.
+			scrollBoxesLeft(); // this wait.
 
 			try {
 				Thread.sleep(100);
@@ -189,17 +189,15 @@ public class MainWindow extends JPanel {
 					clearOrMove = true;
 					boxes.clear();
 					for (IValues vals : values) {
-						Box box = new Box(boxWidth(), boxHeight(), Styler.FONT_BOX_TITLE,
-								Styler.FONT_SUB_ITEM, vals, Styler.FONT_GOOD_COLOR, Styler.FONT_BAD_COLOR);
-						box.paintComponent();
+						Box box = new Box(boxWidth(), boxHeight(), vals);
 						boxes.add(box);
 					}
-					if(boxes.size() > maxBoxes){
+					if (boxes.size() > maxBoxes) {
 						startAutoScroll();
 					}
 				}
 				MainWindow.this.repaint();
-				
+
 			}
 		});
 	}
@@ -263,17 +261,17 @@ public class MainWindow extends JPanel {
 		new Thread(new Animator(10, -10, 0)).start();
 	}
 
-	private void scrollBoxesDown(){
+	private void scrollBoxesDown() {
 		new Thread(new Animator(10, 0, -10)).start();
 	}
-	
-	private void scrollBoxesUp(){
+
+	private void scrollBoxesUp() {
 		new Thread(new Animator(10, 0, 10)).start();
 	}
-	
-	private void startAutoScroll(){
+
+	private void startAutoScroll() {
 		@SuppressWarnings("unused")
-		Runnable scroller = new Runnable(){
+		Runnable scroller = new Runnable() {
 
 			@Override
 			public void run() {
@@ -282,27 +280,28 @@ public class MainWindow extends JPanel {
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} //Let everything in the UI catch up before we start scrolling
-				while(boxes.size() > maxBoxes){
-					//Scroll down
-					
+				} // Let everything in the UI catch up before we start scrolling
+				while (boxes.size() > maxBoxes) {
+					// Scroll down
+
 					try {
 						scrollBoxesUp();
-						Thread.sleep(5000); //Sleep for 5 seconds, then scroll back up
+						Thread.sleep(5000); // Sleep for 5 seconds, then scroll
+											// back up
 						scrollBoxesDown();
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					} //Repeat until boxes has updated.
+					} // Repeat until boxes has updated.
 				}
 			}
 		};
-		//TODO
-		//FIX AUTO SCROLLER
-		//new Thread(scroller).start();
+		// TODO
+		// FIX AUTO SCROLLER
+		// new Thread(scroller).start();
 	}
-	
+
 	class Animator implements Runnable {
 		// private Random rand = new Random(100);
 		private final int sleepTime;
