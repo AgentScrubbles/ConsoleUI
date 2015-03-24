@@ -35,6 +35,8 @@ public class MainWindow extends JPanel {
 	private Point currentLocation;
 	private boolean clearOrMove;
 	private AtomicBoolean animating;
+	private AtomicBoolean showAlert;
+	private ImageBox alertImage;
 
 	/**
 	 * 
@@ -44,8 +46,7 @@ public class MainWindow extends JPanel {
 	public MainWindow(int numberOfBoxesAcross, int numberOfBoxesUpDown,
 			int padding, int heightPadding) {
 
-		/** STYLING OPTIONS **/
-
+		showAlert = new AtomicBoolean(false);
 		boxes = new ArrayList<Box>();
 		screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		this.heightPadding = heightPadding;
@@ -56,6 +57,7 @@ public class MainWindow extends JPanel {
 		this.currentLocation = new Point(padding, padding);
 		this.clearOrMove = true; // Clear the screen
 		animating = new AtomicBoolean(false);
+		alertImage = new ImageBox(Styler.ALERT_IMAGE_FILE_LOC);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -152,6 +154,13 @@ public class MainWindow extends JPanel {
 				 **/
 				g2.setColor(savedColor);
 			}
+			
+			/** ALERT SHOW **/
+			/** I want the alert to be on top of the boxes.  So I'm putting it down here **/
+			
+			if(showAlert.get()){
+				alertImage.drawImage(g2, this);
+			}
 		}
 	}
 
@@ -239,6 +248,30 @@ public class MainWindow extends JPanel {
 		}
 	}
 
+	/** ALERT HELPERS **/
+	
+	public void showAlert(String alert){
+		showAlert.set(true);
+		repaint();
+		//Start a countdown to now showing.
+		Runnable countDown = new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(Styler.ALERT_TIMEOUT_TIME);
+				} catch (InterruptedException e) {
+				}
+				showAlert.set(false);
+				repaint();
+			}
+		};
+		new Thread(countDown).start();
+	}
+	
+	
+	/** ANIMATOR OPTIONS**/
+	
 	private Point generateTextLocation(FontMetrics fm, String text, Box r,
 			int heightPad) {
 		int h = fm.getHeight() + heightPad;

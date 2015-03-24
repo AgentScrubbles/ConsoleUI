@@ -2,6 +2,7 @@ package components;
 
 import java.util.Date;
 
+import messages.AlertMessage;
 import messages.ErrorMessage;
 import messages.IMessage;
 import messages.JSONMessage;
@@ -98,6 +99,10 @@ public abstract class Component {
 
 
 	public void handle(ErrorMessage msg) {
+		handle((IMessage) msg);
+	}
+	
+	public void handle(AlertMessage msg){
 		handle((IMessage) msg);
 	}
 

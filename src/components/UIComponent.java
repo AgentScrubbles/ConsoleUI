@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import messages.AlertMessage;
 import messages.ErrorMessage;
 import messages.IMessage;
 import messages.LoadMessage;
@@ -20,6 +21,7 @@ import console_ui.MainWindow;
 public class UIComponent extends Component {
 
 	private ConcurrentLinkedQueue<UIMessage> inboundMessages;
+	private ConcurrentLinkedQueue<AlertMessage> inboundAlerts;
 	private Component _loadComponent;
 	private AtomicBoolean _stop;
 	private MainWindow window;
@@ -27,9 +29,11 @@ public class UIComponent extends Component {
 	private int numBoxesAcross;
 	private int numBoxesDown;
 
-	public UIComponent(Component logger, Component console, int numBoxesAcroos, int numBoxesDown) {
+	public UIComponent(Component logger, Component console, int numBoxesAcroos,
+			int numBoxesDown) {
 		super(logger, console);
 		inboundMessages = new ConcurrentLinkedQueue<UIMessage>();
+		inboundAlerts = new ConcurrentLinkedQueue<AlertMessage>();
 		_stop = new AtomicBoolean(false);
 		this.numBoxesAcross = numBoxesAcroos;
 		this.numBoxesDown = numBoxesDown;
@@ -64,25 +68,25 @@ public class UIComponent extends Component {
 		frame.getContentPane().add(window);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 
-		if(isUnix()){
+		if (isUnix()) {
 			fullScreen(frame, true);
 		} else {
 			frame.pack();
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setVisible(true);
 		}
-		
-		
+
 		// make sure it closes when you click the close button on the window
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		
-
 	}
+
 	private static String OS = System.getProperty("os.name").toLowerCase();
-	   public static boolean isUnix() {
-	        return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
-	    }
+
+	public static boolean isUnix() {
+		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS
+				.indexOf("aix") > 0);
+	}
 
 	/**
 	 * Requests a message from the loadComponent to load the latest message.
@@ -105,7 +109,7 @@ public class UIComponent extends Component {
 		print("Started");
 		loadSavedValues();
 		while (!_stop.get()) {
-			while (inboundMessages.isEmpty()) {
+			while (inboundMessages.isEmpty() && inboundAlerts.isEmpty()) {
 				try {
 					wait();
 					if (_stop.get()) {
@@ -116,11 +120,25 @@ public class UIComponent extends Component {
 					print(e.getMessage());
 				}
 			}
-			UIMessage uiMsg = inboundMessages.poll();
-			window.UpdateValues(uiMsg.getValues());
-			print("Values updated");
+			if(!inboundAlerts.isEmpty()){
+				AlertMessage alertMsg = inboundAlerts.poll();
+				window.showAlert(alertMsg.getMsg());
+				print("Alert received");
+			}
+			
+			if (!inboundMessages.isEmpty()) {
+				UIMessage uiMsg = inboundMessages.poll();
+				window.UpdateValues(uiMsg.getValues());
+				print("Values updated");
+			}
 		}
 		print("Stopped");
+	}
+
+	@Override
+	public synchronized void handle(AlertMessage msg) {
+		inboundAlerts.add(msg);
+		notifyAll();
 	}
 
 	@Override
@@ -133,7 +151,7 @@ public class UIComponent extends Component {
 	public synchronized void handle(ErrorMessage msg) {
 		print(msg.getError());
 	}
-	
+
 	/**
 	 * @param frame
 	 * @param doPack
@@ -141,48 +159,48 @@ public class UIComponent extends Component {
 	 */
 	private static boolean fullScreen(final JFrame frame, boolean doPack) {
 
-	    GraphicsDevice device = frame.getGraphicsConfiguration().getDevice();
-	    boolean result = device.isFullScreenSupported();
+		GraphicsDevice device = frame.getGraphicsConfiguration().getDevice();
+		boolean result = device.isFullScreenSupported();
 
-	    if (result) {
-	        frame.setUndecorated(true);
-	        frame.setResizable(true);
+		if (result) {
+			frame.setUndecorated(true);
+			frame.setResizable(true);
 
-	        frame.addFocusListener(new FocusListener() {
+			frame.addFocusListener(new FocusListener() {
 
-	            @Override
-	            public void focusGained(FocusEvent arg0) {
-	                frame.setAlwaysOnTop(true);
-	            }
+				@Override
+				public void focusGained(FocusEvent arg0) {
+					frame.setAlwaysOnTop(true);
+				}
 
-	            @Override
-	            public void focusLost(FocusEvent arg0) {
-	                frame.setAlwaysOnTop(false);
-	            }
-	        });
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					frame.setAlwaysOnTop(false);
+				}
+			});
 
-	        if (doPack)
-	            frame.pack();
+			if (doPack)
+				frame.pack();
 
-	        device.setFullScreenWindow(frame);
-	    }
-	    else {
-	        frame.setPreferredSize(frame.getGraphicsConfiguration().getBounds().getSize());
+			device.setFullScreenWindow(frame);
+		} else {
+			frame.setPreferredSize(frame.getGraphicsConfiguration().getBounds()
+					.getSize());
 
-	        if (doPack)
-	            frame.pack();
+			if (doPack)
+				frame.pack();
 
-	        frame.setResizable(true);
+			frame.setResizable(true);
 
-	        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-	        boolean successful = frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
+			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+			boolean successful = frame.getExtendedState() == Frame.MAXIMIZED_BOTH;
 
-	        frame.setVisible(true);
+			frame.setVisible(true);
 
-	        if (!successful)
-	            frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    }
-	    return result;
+			if (!successful)
+				frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		}
+		return result;
 	}
 
 }
