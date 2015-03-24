@@ -151,3 +151,6 @@
 [ Tue Mar 24 11:34:32 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
 [ Tue Mar 24 11:35:01 CDT 2015 ] [ LoggingComponent ] Started
 [ Tue Mar 24 11:35:01 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully
+[ Tue Mar 24 12:16:22 CDT 2015 ] [ LoggingComponent ] Started
+[ Tue Mar 24 12:17:34 CDT 2015 ] [ LoggingComponent ] Started
+[ Tue Mar 24 12:17:46 CDT 2015 ] [ ParserComponent ] Parsed JSON data successfully

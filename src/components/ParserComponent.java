@@ -9,6 +9,8 @@ import java.lang.reflect.Type;
 
 import main_console.ConcreteValues;
 import main_console.IValues;
+import messages.AlertMessage;
+import messages.ErrorMessage;
 import messages.IMessage;
 import messages.JSONMessage;
 import messages.UIMessage;
@@ -21,7 +23,8 @@ public class ParserComponent extends Component {
 	private AtomicBoolean _stop;
 	private ConcurrentLinkedQueue<JSONMessage> _inboundQueue;
 
-	public ParserComponent(Component logger, Component console, Component callback) {
+	public ParserComponent(Component logger, Component console,
+			Component callback) {
 		super(logger, console);
 		_sendComponent = callback;
 		_stop = new AtomicBoolean(false);
@@ -35,18 +38,35 @@ public class ParserComponent extends Component {
 	 *            String consistent of JSON, refer to specs for how to create
 	 * @return List of IValue components
 	 */
-	private List<IValues> parse(String jsonString) {
+	private IMessage parse(JSONMessage msg) {
+		IMessage retMessage;
 		Type type = new TypeToken<Map<String, Object>>() {
 		}.getType();
 		Gson gson = new Gson();
-		Map<String, Map<String, Map<String, Object>>> full = gson.fromJson(jsonString, type);
+		Map<String, Map<String, Map<String, Object>>> full = gson.fromJson(
+				msg.getJSON(), type);
 		List<IValues> list = new ArrayList<IValues>();
-		for (String val : full.get("values").keySet()) { //Val should be an Index
-			IValues ivals = mapToValues(full.get("values").get(val));
-			list.add(Integer.parseInt(val), ivals);
+		// Is this a value message or alert message?
+		if (full.get("values") != null) {
+			for (String val : full.get("values").keySet()) { // Val should be an
+																// Index
+				IValues ivals = mapToValues(full.get("values").get(val));
+				list.add(Integer.parseInt(val), ivals);
+			}
+			retMessage = new UIMessage(this,
+					msg.getCorrelationId(), list);
+		} else if (full.get("alerts") != null){
+			String alertString = (String) full.get("alerts").get("values").get("string");
+			retMessage = new AlertMessage(this, msg.getCorrelationId(), alertString);
+		} else {
+			String s = "Could not parse the JSON correctly!";
+			retMessage = new ErrorMessage(this, msg.getCorrelationId(), s);
+			print(s);
+			log(s);
 		}
-		return list;
+		return retMessage;
 	}
+	
 
 	private IValues mapToValues(Map<String, Object> map) {
 		String name = (String) map.get("name");
@@ -88,7 +108,7 @@ public class ParserComponent extends Component {
 			while (_inboundQueue.isEmpty()) {
 				try {
 					wait();
-					if(_stop.get()){
+					if (_stop.get()) {
 						print("Stopped.");
 						return;
 					}
@@ -99,12 +119,10 @@ public class ParserComponent extends Component {
 			}
 			try {
 				JSONMessage jsonMsg = _inboundQueue.poll();
-				List<IValues> completed = parse(jsonMsg.getJSON());
+				IMessage msg = parse(jsonMsg);
 				print("Parsed JSON data successfully.");
 				log("Parsed JSON data successfully");
-				IMessage uiMsg = new UIMessage(this,
-						jsonMsg.getCorrelationId(), completed);
-				_sendComponent.send(uiMsg);
+				_sendComponent.send(msg);
 			} catch (Exception ex) {
 				print(ex.getMessage());
 				log(ex.getMessage());

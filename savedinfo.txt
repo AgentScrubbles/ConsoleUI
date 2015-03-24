@@ -1,1 +1,1 @@
-{"values":{"0":{"name":"Item 1","current":"Main","month":"Second","goal":"Third","met":true},"1":{"name":"Item 2","current":"Main","month":"Second","goal":"Third","met":true},"2":{"name":"","current":"","month":"","goal":"","met":false}}}
+{"values":{"0":{"name":"","current":"","month":"","goal":"","met":false}}}

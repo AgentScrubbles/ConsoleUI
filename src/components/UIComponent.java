@@ -2,15 +2,12 @@ package components;
 
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-
 import messages.AlertMessage;
 import messages.ErrorMessage;
 import messages.IMessage;
