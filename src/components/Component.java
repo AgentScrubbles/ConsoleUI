@@ -29,7 +29,7 @@ public abstract class Component {
 	protected void log(String logString) {
 		logString = generateClassString() + logString;
 		logger.send(new TextMessage(this, IntGenerator.generateCorrelation(),
-				logString));
+				logString + "\n"));
 	}
 
 	protected void print(String printString) {
@@ -39,7 +39,7 @@ public abstract class Component {
 	}
 
 	protected String generateClassString(){
-		return "[ " + new Date().toString() + " ] [ " + getFriendlyName() + " ] ";
+		return "[ " + new Date().toString() + " ] [ " + Thread.currentThread().getId() + " ]  [ " + getFriendlyName() + " ] ";
 	}
 	
 	protected String getFriendlyName(){

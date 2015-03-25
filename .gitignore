@@ -58,3 +58,5 @@ $RECYCLE.BIN/
 *.lnk
 /bin/
 logfile.txt
+savedinfo.txt
+*.txt
